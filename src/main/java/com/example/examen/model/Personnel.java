@@ -1,9 +1,6 @@
 package com.example.examen.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Personnel {
@@ -19,6 +16,10 @@ public class Personnel {
     private String branch;
     private String homeAddress;
     private String countryOfOrigin;
+
+    @ManyToOne
+    @JoinColumn(name = "custom_user_id")
+    private CustomUser customUser;
 
     public Long getId() {
         return id;
@@ -74,5 +75,13 @@ public class Personnel {
 
     public void setCountryOfOrigin(String countryOfOrigin) {
         this.countryOfOrigin = countryOfOrigin;
+    }
+
+    public CustomUser getCustomUser() {
+        return customUser;
+    }
+
+    public void setCustomUser(CustomUser customUser) {
+        this.customUser = customUser;
     }
 }

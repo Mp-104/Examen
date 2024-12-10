@@ -13,13 +13,22 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll()); // For production purposes, change later
+                .anyRequest().authenticated())// For production purposes, change later
+
+            .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer
+                        .loginPage("/login").permitAll())
+
+            .logout( httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer
+                    .logoutUrl("/logout")
+                    .clearAuthentication(true)
+                    .invalidateHttpSession(true)
+                    .permitAll());
 
         return http.build();
     }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/h2-console/**", "/personnel/**", /*"/register",*/ "/update/**", /*"/list/**",*/ "/update/**"/*, "/delete/**"*/);
+        return (web) -> web.ignoring().requestMatchers("/h2-console/**", /*"/personnel/**", "/register",*/ "/update/**", /*"/list/**",*/ "/update/**"/*, "/delete/**"*/);
     }
 }
