@@ -22,10 +22,12 @@ public class DBInit {
 
         UserDTO user1 = new UserDTO("test", "test", UserRole.ADMIN);
         UserDTO user2 = new UserDTO("test2", "test", UserRole.USER);
+        UserDTO user3 = new UserDTO("test3", "test", UserRole.GUEST);
 
 
         userService.saveUser(user1);
         userService.saveUser(user2);
+        userService.saveUser(user3);
 
     }
 }

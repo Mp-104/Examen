@@ -6,6 +6,7 @@ import com.example.examen.principal.MyPrincipal;
 import com.example.examen.repository.PersonnelRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.List;
 
 import static com.example.examen.principal.MyPrincipal.getLoggedInUser;
@@ -30,6 +31,9 @@ public class PersonnelService implements IPersonnelService {
     @Override
     public void savePersonnel(Personnel personnel) {
 
+        String base64 = Base64.getEncoder().encodeToString(personnel.getPicture());
+
+        personnel.setImage(base64);
 
 
         CustomUser loggedInUser = userService.findUserByUsername(getLoggedInUser()).get();

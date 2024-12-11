@@ -11,7 +11,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.List;
 
 import static com.example.examen.principal.MyPrincipal.getLoggedInUser;
@@ -35,8 +41,18 @@ public class PersonnelController {
 
         List<Personnel> personnelList = personnelService.findAll();
 
-        CustomUser loggedInUser = userService.findUserByUsername(getLoggedInUser()).get();
+
+        CustomUser loggedInUser = userService.findUserByUsername(
+                getLoggedInUser()
+                //"test"
+        ).get();
         List<Personnel> usersPersonnelList = loggedInUser.getPersonnelList();
+
+//        Personnel firstPersonnel = usersPersonnelList.get(0);
+//
+//        model.addAttribute("firstPersonnel", firstPersonnel);
+
+
 
         model.addAttribute("personnel", new Personnel());
         model.addAttribute("personnelList", usersPersonnelList);
@@ -44,7 +60,14 @@ public class PersonnelController {
     }
 
     @PostMapping("/personnel")
-    public String addPersonnel (@ModelAttribute("personnel") Personnel personnel, Model model) {
+    public String addPersonnel (@ModelAttribute("personnel") Personnel personnel,
+                                Model model,
+                                @RequestParam("imageFile") MultipartFile file
+    ) throws IOException {
+
+        //Byte[] byteObjects = convertToBytes(file);
+
+        personnel.setPicture(file.getBytes());
 
         personnelService.savePersonnel(personnel);
 
@@ -55,6 +78,17 @@ public class PersonnelController {
         //return "redirect:/personnel";
         return "personnel-page";
 
+    }
+
+    public Byte[] convertToBytes (MultipartFile file) throws IOException {
+        Byte[] byteObjects = new Byte[file.getBytes().length];
+
+        int i = 0;
+
+        for(byte b : file.getBytes()) {
+            byteObjects[i++] = b;
+        }
+        return byteObjects;
     }
 
 

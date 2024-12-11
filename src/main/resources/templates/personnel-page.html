@@ -7,55 +7,59 @@
 <body>
 <h1>Personnel page Add</h1>
 
-<form th:object="${personnel}" th:action="@{/personnel}" method="post">
+    <form th:object="${personnel}" th:action="@{/personnel}" method="post" enctype="multipart/form-data">
 
-    <label>Förnamn:
-        <input type="text" name="firstName" th:field="*{firstName}">
-    </label>
+        <input type="file" name="imageFile" id="picture" class="file" placeholder="Bild" >
+
+        <label>Förnamn:
+            <input type="text" name="firstName" th:field="*{firstName}">
+        </label>
+        <br/>
+        <br/>
+
+        <label>Efternamn:
+            <input type="text" name="lastName" th:field="*{lastName}">
+        </label>
+        <br/>
+        <br/>
+
+
+        <label>Försvarsgren:
+            <input type="text" name="branch" th:field="*{branch}">
+        </label>
+        <br/>
+        <br/>
+
+
+        <label>Ursprungsland:
+            <input type="text" name="countryOfOrigin" th:field="*{countryOfOrigin}">
+        </label>
+        <br/>
+        <br/>
+
+
+
+
+        <button type="submit">Lägg till</button>
+    </form>
+
+    <div th:if="${added}">
+        <p th:text="${added}"></p>
+    </div>
+
     <br/>
-    <br/>
 
-    <label>Efternamn:
-        <input type="text" name="lastName" th:field="*{lastName}">
-    </label>
-    <br/>
-    <br/>
+    <div>
+        <ul>
+            <li th:each="personnel : ${personnelList}">
 
+                <span th:text="*{personnel.firstName}"></span>
 
-    <label>Försvarsgren:
-        <input type="text" name="branch" th:field="*{branch}">
-    </label>
-    <br/>
-    <br/>
+                <img th:src="'data:image/jpeg;base64, ' + ${personnel.image}">
+            </li>
+        </ul>
+    </div>
 
-
-    <label>Ursprungsland:
-        <input type="text" name="countryOfOrigin" th:field="*{countryOfOrigin}">
-    </label>
-    <br/>
-    <br/>
-
-
-
-
-    <button type="submit">Lägg till</button>
-</form>
-
-<div th:if="${added}">
-    <p th:text="${added}"></p>
-</div>
-
-<br/>
-
-<div>
-    <ul>
-        <li th:each="personnel : ${personnelList}">
-
-            <span th:text="*{personnel.firstName}"></span>
-
-        </li>
-    </ul>
-</div>
 
 </body>
 </html>

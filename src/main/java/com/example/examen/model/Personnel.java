@@ -17,6 +17,12 @@ public class Personnel {
     private String homeAddress;
     private String countryOfOrigin;
 
+    @Lob
+    private byte[] picture;
+
+    @Lob
+    private String image;
+
     @ManyToOne
     @JoinColumn(name = "custom_user_id")
     private CustomUser customUser;
@@ -83,5 +89,21 @@ public class Personnel {
 
     public void setCustomUser(CustomUser customUser) {
         this.customUser = customUser;
+    }
+
+    public byte[] getPicture() {
+        return picture;
+    }
+
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
