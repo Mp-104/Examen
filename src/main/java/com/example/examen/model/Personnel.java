@@ -1,6 +1,9 @@
 package com.example.examen.model;
 
 import jakarta.persistence.*;
+import org.w3c.dom.stylesheets.LinkStyle;
+
+import java.util.List;
 
 @Entity
 public class Personnel {
@@ -18,10 +21,40 @@ public class Personnel {
     private String countryOfOrigin;
 
     @Lob
+    @Transient
     private byte[] picture;
 
     @Lob
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "personnel_pictures", joinColumns = @JoinColumn(name = "personnel_id"))
+    @Column(name = "picture")
+    @Transient
+    private List<byte[]> pictures;
+
+
+    public List<byte[]> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<byte[]> pictures) {
+        this.pictures = pictures;
+    }
+
+    @Lob
     private String image;
+    @Lob
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name= "personnel_images", joinColumns = @JoinColumn(name = "personnel_id"))
+    @Column(name= "image")
+    private List<String> images;
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
 
     @ManyToOne
     @JoinColumn(name = "custom_user_id")

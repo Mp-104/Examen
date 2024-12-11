@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -62,34 +63,38 @@ public class PersonnelController {
     @PostMapping("/personnel")
     public String addPersonnel (@ModelAttribute("personnel") Personnel personnel,
                                 Model model,
-                                @RequestParam("imageFile") MultipartFile file
+                                @RequestParam("imageFiles") List<MultipartFile> files,
+                                @RequestParam("imageFile") MultipartFile file // Make sure the template form has: enctype="multipart/form-data", which allows the form to be sent as a Multipart file with a Personnel object and image file
     ) throws IOException {
 
-        //Byte[] byteObjects = convertToBytes(file);
+        List<byte[]> pictures = new ArrayList<>();
 
-        personnel.setPicture(file.getBytes());
+        for (MultipartFile file1 : files) {
+            pictures.add(file1.getBytes());
+        }
+
+        personnel.setPictures(pictures);
+
+        personnel.setPicture(file.getBytes()); // file refers to the one acquired in the personnel-page.html form with the name: "imageFile", which is an input with type = "file"
 
         personnelService.savePersonnel(personnel);
+
+        CustomUser loggedInUser = userService.findUserByUsername(
+                getLoggedInUser()
+                //"test"
+        ).get();
+        List<Personnel> usersPersonnelList = loggedInUser.getPersonnelList();
 
 
         model.addAttribute("added", "Tillagt: " + personnel.getFirstName());
         model.addAttribute("personnel", new Personnel());
+        model.addAttribute("personnelList", usersPersonnelList);
 
         //return "redirect:/personnel";
         return "personnel-page";
 
     }
 
-    public Byte[] convertToBytes (MultipartFile file) throws IOException {
-        Byte[] byteObjects = new Byte[file.getBytes().length];
-
-        int i = 0;
-
-        for(byte b : file.getBytes()) {
-            byteObjects[i++] = b;
-        }
-        return byteObjects;
-    }
 
 
 

@@ -6,6 +6,7 @@ import com.example.examen.principal.MyPrincipal;
 import com.example.examen.repository.PersonnelRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -31,6 +32,18 @@ public class PersonnelService implements IPersonnelService {
     @Override
     public void savePersonnel(Personnel personnel) {
 
+        List<String> imageList = new ArrayList<>();
+
+        for (byte[] picture : personnel.getPictures()) {
+            String base64 = Base64.getEncoder().encodeToString(picture);
+            imageList.add(base64);
+        }
+
+        personnel.setImages(imageList);
+
+
+
+        // ----------------------------------------------------------------------------------------//
         String base64 = Base64.getEncoder().encodeToString(personnel.getPicture());
 
         personnel.setImage(base64);
