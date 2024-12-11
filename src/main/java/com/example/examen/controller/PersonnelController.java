@@ -95,6 +95,13 @@ public class PersonnelController {
 
     }
 
+    @GetMapping("/allpersonnel")
+    public String allPersonnel (Model model) {
+
+
+        model.addAttribute("personnelList", personnelService.findAll());
+        return "personnel-list";
+    }
 
 
 

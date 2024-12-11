@@ -15,6 +15,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/personnel").hasAuthority("POST")
+                        .requestMatchers("/allpersonnel").permitAll()
                         .anyRequest().authenticated())// For production purposes, change later
 
             .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer

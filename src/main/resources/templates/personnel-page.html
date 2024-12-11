@@ -58,10 +58,10 @@
                 <span th:text="${personnel.firstName}"></span>
 
                 <span th:each="image : ${personnel.images}">
-                    <img th:src="'data:image/jpeg;base64, ' + ${image}" alt="image">
+                    <img th:src="'data:image/jpeg;base64, ' + ${image}" alt="image" style="max-width: 200px">
                 </span>
 
-                <img th:src="'data:image/jpeg;base64, ' + ${personnel.image}">
+                <img th:src="'data:image/jpeg;base64, ' + ${personnel.image}" style="max-width: 200px">
             </li>
 
         </ul>

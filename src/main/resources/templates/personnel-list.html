@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Personnel</title>
+</head>
+<body>
+    <h1>All personnel</h1>
+
+    <ul>
+        <li th:each="personnel : ${personnelList}">
+
+            <span th:text="${personnel.firstName}"></span>
+
+            <span th:each="image, index : ${personnel.images}">
+                <img th:if="${index.index == 0}" th:src="'data:image/jpeg;base64, ' + ${image}" style="max-width: 250px" >
+            </span>
+
+        </li>
+    </ul>
+
+</body>
+</html>
