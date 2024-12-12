@@ -39,13 +39,22 @@ public class PersonnelService implements IPersonnelService {
 
         List<String> imageList = new ArrayList<>();
 
-        if (personnel.getImages() == null) {
+        //TODO fix so it does not saves empty values
+        if (personnel.getImages() == null && personnel.getPictures() != null) {
+            System.out.println("savePersonnel" );
+            System.out.println("personnel.getPictures().sizer(): " + personnel.getPictures().size());
+            System.out.println("getPictures.get(0): " + personnel.getPictures().get(0));
             for (byte[] picture : personnel.getPictures()) {
                 String base64 = Base64.getEncoder().encodeToString(picture);
                 imageList.add(base64);
             }
+            System.out.println("imageList.size: " + imageList.size());
+            if (imageList.size() > 0) {
+                System.out.println("it saved");
+                personnel.setImages(imageList);
+            }
 
-            personnel.setImages(imageList);
+
         }
 
 

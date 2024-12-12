@@ -14,9 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 
 import static com.example.examen.principal.MyPrincipal.getLoggedInUser;
 
@@ -64,13 +62,25 @@ public class PersonnelController {
                                 @RequestParam("imageFile") MultipartFile file // Make sure the template form has: enctype="multipart/form-data", which allows the form to be sent as a Multipart file with a Personnel object and image file
     ) throws IOException {
 
-        List<byte[]> pictures = new ArrayList<>();
+        // Todo - clean up and move to service class
 
-        for (MultipartFile file1 : files) {
-            pictures.add(file1.getBytes());
+        List<byte[]> pictures = new ArrayList<>();
+        // Checks to see if it's empty
+        if (!Arrays.toString(files.get(0).getBytes()).equals("[]")) {
+
+            for (MultipartFile file1 : files) {
+                pictures.add(file1.getBytes());
+            }
+            System.out.println("-----In Controller addPersonnel ()-------");
+//            System.out.println("files.size: " + files.size());
+//            System.out.println("files.get(0): " + files.get(0));
+//            System.out.println("Arrays.toStringfiles.get(0).getBytes: " + Arrays.toString(files.get(0).getBytes()));
+            System.out.println("-----In Controller addPersonnel ()-------");
+
+
+            personnel.setPictures(pictures);
         }
 
-        personnel.setPictures(pictures);
 
         personnel.setPicture(file.getBytes()); // file refers to the one acquired in the personnel-page.html form with the name: "imageFile", which is an input with type = "file"
 
@@ -128,7 +138,7 @@ public class PersonnelController {
 //        System.out.println("getImages.get1: " + personnel.getImages().get(1));
         System.out.println("/POST----- PersonnelController -- personnelInfoPage ---- ");
 
-        String image = personnel.getImages().get(0);
+        //String image = personnel.getImages().get(0);
 
 
         model.addAttribute("personnel", personnel);
@@ -137,10 +147,28 @@ public class PersonnelController {
     }
 
     @PostMapping("/edit")
-    public String editPersonnel (@ModelAttribute Personnel personnel, Model model) {
+    public String editPersonnel (@ModelAttribute Personnel personnel, Model model,
+                                 @RequestParam("imageFiles") List<MultipartFile> files) throws IOException {
 
         Personnel personnel1 = personnelService.findPersonnelById(personnel.getId()).get();
+
+        List<String> images = personnel1.getImages();
+
+        // to prevent duplicates
+        Set<String> uniqueImages = new HashSet<>(images);
+
+        for (MultipartFile file : files) {
+
+            uniqueImages.add(Base64.getEncoder().encodeToString(file.getBytes()));
+
+        }
+
+        images = new ArrayList<>(uniqueImages);
+
+
         personnel1.setFirstName(personnel.getFirstName());
+
+        personnel1.setImages(images);
 
         personnelService.savePersonnel(personnel1);
 
