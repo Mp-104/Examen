@@ -73,10 +73,12 @@
                     <img th:src="'data:image/jpeg;base64, ' + ${image}" alt="image" style="max-width: 200px">
                 </span>
 
+                <!--
                 <form th:action="@{/personnel-info/{id}(id=${personnel.id})}" th:object="${personnel}" method="get">
                     <button type="submit">Se detaljer (id)</button>
 
                 </form>
+                -->
 
                 <form th:action="@{/personnel-info}" th:object="${personnel}" method="post">
 

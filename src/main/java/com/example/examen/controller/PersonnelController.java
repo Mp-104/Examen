@@ -100,32 +100,32 @@ public class PersonnelController {
         return "personnel-list";
     }
 
-    @GetMapping("/personnel-info/{id}")
-    public String personnelInfoPage (@PathVariable Long id, Model model) {
-
-        Personnel personnel = personnelService.findPersonnelById(id).get();
-
-        System.out.println("GET----- PersonnelController -- personnelInfoPage ----GET ");
-        System.out.println("personnel.getFirstName: " + personnel.getFirstName());
-        System.out.println("getImages.size: " + personnel.getImages().size());
-        System.out.println("getImages.get0: " + personnel.getImages().get(0));
-        System.out.println("getImages.get1: " + personnel.getImages().get(1));
-        System.out.println("/GET----- PersonnelController -- personnelInfoPage ---- ");
-
-
-        model.addAttribute("personnel", personnel);
-        return "personnel-info-page";
-    }
+//    @GetMapping("/personnel-info/{id}")
+//    public String personnelInfoPage (@PathVariable Long id, Model model) {
+//
+//        Personnel personnel = personnelService.findPersonnelById(id).get();
+//
+//        System.out.println("GET----- PersonnelController -- personnelInfoPage ----GET ");
+//        System.out.println("personnel.getFirstName: " + personnel.getFirstName());
+//        System.out.println("getImages.size: " + personnel.getImages().size());
+//        System.out.println("getImages.get0: " + personnel.getImages().get(0));
+//        System.out.println("getImages.get1: " + personnel.getImages().get(1));
+//        System.out.println("/GET----- PersonnelController -- personnelInfoPage ---- ");
+//
+//
+//        model.addAttribute("personnel", personnel);
+//        return "personnel-info-page";
+//    }
 
 
     @PostMapping("/personnel-info")
     public String personnelInfoPage2 (@ModelAttribute("personnel") Personnel personnel, Model model) {
 
         System.out.println("POST----- PersonnelController -- personnelInfoPage ----POST ");
-        System.out.println("personnel.getFirstName: " + personnel.getFirstName());
-        System.out.println("getImages.size: " + personnel.getImages().size());
-        System.out.println("getImages.get0: " + personnel.getImages().get(0));
-        System.out.println("getImages.get1: " + personnel.getImages().get(1));
+//        System.out.println("personnel.getFirstName: " + personnel.getFirstName());
+//        System.out.println("getImages.size: " + personnel.getImages().size());
+//        System.out.println("getImages.get0: " + personnel.getImages().get(0));
+//        System.out.println("getImages.get1: " + personnel.getImages().get(1));
         System.out.println("/POST----- PersonnelController -- personnelInfoPage ---- ");
 
         String image = personnel.getImages().get(0);
@@ -135,5 +135,21 @@ public class PersonnelController {
         return "personnel-info-page";
 
     }
+
+    @PostMapping("/edit")
+    public String editPersonnel (@ModelAttribute Personnel personnel, Model model) {
+
+        Personnel personnel1 = personnelService.findPersonnelById(personnel.getId()).get();
+        personnel1.setFirstName(personnel.getFirstName());
+
+        personnelService.savePersonnel(personnel1);
+
+        model.addAttribute("personnel", personnel1);
+
+        return "personnel-info-page";
+
+    }
+
+
 
 }

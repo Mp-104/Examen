@@ -39,19 +39,28 @@ public class PersonnelService implements IPersonnelService {
 
         List<String> imageList = new ArrayList<>();
 
-        for (byte[] picture : personnel.getPictures()) {
-            String base64 = Base64.getEncoder().encodeToString(picture);
-            imageList.add(base64);
+        if (personnel.getImages() == null) {
+            for (byte[] picture : personnel.getPictures()) {
+                String base64 = Base64.getEncoder().encodeToString(picture);
+                imageList.add(base64);
+            }
+
+            personnel.setImages(imageList);
         }
 
-        personnel.setImages(imageList);
+
+
 
 
 
         // ----------------------------------------------------------------------------------------//
-        String base64 = Base64.getEncoder().encodeToString(personnel.getPicture());
 
-        personnel.setImage(base64);
+        if (personnel.getImage() == null) {
+            String base64 = Base64.getEncoder().encodeToString(personnel.getPicture());
+
+            personnel.setImage(base64);
+        }
+
 
 
         CustomUser loggedInUser = userService.findUserByUsername(getLoggedInUser()).get();
