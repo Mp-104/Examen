@@ -36,6 +36,7 @@ public class SecurityConfig {
 
             .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer
                     .logoutUrl("/logout")
+                    .logoutSuccessUrl("/")
                     .clearAuthentication(true)
                     .invalidateHttpSession(true)
                     .deleteCookies("remember-me", "JSESSIONID")

@@ -8,10 +8,7 @@ import com.example.examen.service.IPersonnelService;
 import com.example.examen.service.IUserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -103,6 +100,40 @@ public class PersonnelController {
         return "personnel-list";
     }
 
+    @GetMapping("/personnel-info/{id}")
+    public String personnelInfoPage (@PathVariable Long id, Model model) {
 
+        Personnel personnel = personnelService.findPersonnelById(id).get();
+
+        System.out.println("GET----- PersonnelController -- personnelInfoPage ----GET ");
+        System.out.println("personnel.getFirstName: " + personnel.getFirstName());
+        System.out.println("getImages.size: " + personnel.getImages().size());
+        System.out.println("getImages.get0: " + personnel.getImages().get(0));
+        System.out.println("getImages.get1: " + personnel.getImages().get(1));
+        System.out.println("/GET----- PersonnelController -- personnelInfoPage ---- ");
+
+
+        model.addAttribute("personnel", personnel);
+        return "personnel-info-page";
+    }
+
+
+    @PostMapping("/personnel-info")
+    public String personnelInfoPage2 (@ModelAttribute("personnel") Personnel personnel, Model model) {
+
+        System.out.println("POST----- PersonnelController -- personnelInfoPage ----POST ");
+        System.out.println("personnel.getFirstName: " + personnel.getFirstName());
+        System.out.println("getImages.size: " + personnel.getImages().size());
+        System.out.println("getImages.get0: " + personnel.getImages().get(0));
+        System.out.println("getImages.get1: " + personnel.getImages().get(1));
+        System.out.println("/POST----- PersonnelController -- personnelInfoPage ---- ");
+
+        String image = personnel.getImages().get(0);
+
+
+        model.addAttribute("personnel", personnel);
+        return "personnel-info-page";
+
+    }
 
 }

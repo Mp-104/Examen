@@ -2,13 +2,13 @@ package com.example.examen.service;
 
 import com.example.examen.model.CustomUser;
 import com.example.examen.model.Personnel;
-import com.example.examen.principal.MyPrincipal;
 import com.example.examen.repository.PersonnelRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 import static com.example.examen.principal.MyPrincipal.getLoggedInUser;
 
@@ -27,6 +27,11 @@ public class PersonnelService implements IPersonnelService {
     @Override
     public List<Personnel> findAll() {
         return personnelRepository.findAll();
+    }
+
+    @Override
+    public Optional<Personnel> findPersonnelById(Long id) {
+        return personnelRepository.findById(id);
     }
 
     @Override

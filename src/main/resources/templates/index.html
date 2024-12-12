@@ -7,13 +7,13 @@
 <body>
     <h1>Index page</h1>
 
-    <a sec:authorize="isAnonymous()" href="/login"><button>Logga in</button></a>
-    <br/>
-    <br/>
+    <div>
+        <a sec:authorize="isAnonymous()" href="/login"><button>Logga in</button></a>
 
-    <form sec:authorize="hasAuthority('GET')" th:action="@{/logout}" method="post">
-        <button type="submit">Logga ut</button>
-    </form>
+        <form sec:authorize="hasAuthority('GET')" th:action="@{/logout}" method="post">
+            <button type="submit">Logga ut</button>
+        </form>
+    </div>
 
     <br/>
     <br/>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Personnel Info</title>
+</head>
+<body>
+    <h1>Personnel info page</h1>
+
+    <h1 th:text="${personnel.firstName}"></h1>
+    <h1 th:text="${personnel.lastName}"></h1>
+    <p th:text="${personnel.id}"></p>
+
+    <img th:src="'data:image/jpeg;base64, ' + ${personnel.image}" style="max-width: 200px">
+
+    <span th:each="image : ${personnel.images}">
+        <img th:src="'data:image/jpeg;base64, ' + ${image}" alt="image" style="max-width: 200px">
+    </span>
+
+
+</body>
+</html>

@@ -63,9 +63,9 @@
     <div>
         <ul>
 
-            <li th:each="personnel : ${personnelList}">
+            <li th:each="personnel, personnel2 : ${personnelList}">
 
-                <span th:text="${personnel.firstName}"></span>
+                <span th:text="${personnel.firstName}"></span> <span> </span> <span th:text="${personnel.lastName}"></span>
 
                 <img th:src="'data:image/jpeg;base64, ' + ${personnel.image}" style="max-width: 200px">
 
@@ -73,6 +73,37 @@
                     <img th:src="'data:image/jpeg;base64, ' + ${image}" alt="image" style="max-width: 200px">
                 </span>
 
+                <form th:action="@{/personnel-info/{id}(id=${personnel.id})}" th:object="${personnel}" method="get">
+                    <button type="submit">Se detaljer (id)</button>
+
+                </form>
+
+                <form th:action="@{/personnel-info}" th:object="${personnel}" method="post">
+
+                    <input type="hidden" th:name="id" th:value="${personnel.id}">
+                    <input type="hidden" th:name="firstName" th:value="${personnel.firstName}">
+                    <input type="hidden" th:name="lastName" th:value="${personnel.lastName}">
+
+                    <input type="hidden" th:name="rank" th:value="${personnel.rank}">
+                    <input type="hidden" th:name="branch" th:value="${personnel.branch}">
+                    <input type="hidden" th:name="homeAddress" th:value="${personnel.homeAddress}">
+                    <input type="hidden" th:name="image" th:value="${personnel.image}">
+
+                    <!-- parsing images directly such as:
+                    <input type="hidden" th:name="images" th:value="${personnel.images}" >
+
+                    will result in incorrect parsing which subsequently will not render them properly.
+
+                    thus a for each loop is used to parse each image individually
+
+                    -->
+                    <span th:each="image : ${personnel.images}">
+                        <input type="hidden" th:name="images" th:value="${image}">
+                    </span>
+
+                    <button type="submit">Se detaljer (personnel)</button>
+
+                </form>
 
             </li>
 

@@ -9,6 +9,36 @@ import java.util.List;
 public class Personnel {
     //TODO - in progress
 
+
+    public Personnel(Long id,
+                     String firstName,
+                     String lastName,
+                     String rank,
+                     String branch,
+                     String homeAddress,
+                     String countryOfOrigin,
+                     byte[] picture,
+                     List<byte[]> pictures,
+                     String image,
+                     List<String> images,
+                     CustomUser customUser) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.rank = rank;
+        this.branch = branch;
+        this.homeAddress = homeAddress;
+        this.countryOfOrigin = countryOfOrigin;
+        this.picture = picture;
+        this.pictures = pictures;
+        this.image = image;
+        this.images = images;
+        this.customUser = customUser;
+    }
+
+    public Personnel() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -32,14 +62,6 @@ public class Personnel {
     private List<byte[]> pictures;
 
 
-    public List<byte[]> getPictures() {
-        return pictures;
-    }
-
-    public void setPictures(List<byte[]> pictures) {
-        this.pictures = pictures;
-    }
-
     @Lob
     private String image;
     @Lob
@@ -47,14 +69,6 @@ public class Personnel {
     @CollectionTable(name= "personnel_images", joinColumns = @JoinColumn(name = "personnel_id"))
     @Column(name= "image")
     private List<String> images;
-
-    public List<String> getImages() {
-        return images;
-    }
-
-    public void setImages(List<String> images) {
-        this.images = images;
-    }
 
     @ManyToOne
     @JoinColumn(name = "custom_user_id")
@@ -138,5 +152,21 @@ public class Personnel {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+
+    public List<byte[]> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<byte[]> pictures) {
+        this.pictures = pictures;
     }
 }
