@@ -7,8 +7,21 @@
 <body>
     <h1>Index page</h1>
 
-    <a href="/login"><button>Logga in</button></a>
+    <a sec:authorize="isAnonymous()" href="/login"><button>Logga in</button></a>
+    <br/>
+    <br/>
+
+    <form sec:authorize="hasAuthority('GET')" th:action="@{/logout}" method="post">
+        <button type="submit">Logga ut</button>
+    </form>
+
+    <br/>
+    <br/>
+
     <a href="/allpersonnel">Se alla personnel</a>
+    <br/>
+    <br/>
+
 
     <div sec:authorize="hasAuthority('POST')">
         <a href="/personnel"><button>Lägg till uppgifter</button></a>

@@ -6,8 +6,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.util.concurrent.TimeUnit;
+
 @Configuration
 public class SecurityConfig {
+    private final CustomUserDetailsService customUserDetailsService;
+
+    public SecurityConfig (CustomUserDetailsService customUserDetailsService) {
+        this.customUserDetailsService = customUserDetailsService;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
@@ -16,15 +23,22 @@ public class SecurityConfig {
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/personnel").hasAuthority("POST")
                         .requestMatchers("/allpersonnel").permitAll()
-                        .anyRequest().authenticated())// For production purposes, change later
+                        .anyRequest().authenticated())
 
             .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer
                         .loginPage("/login").permitAll())
 
-            .logout( httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer
+            .rememberMe(httpSecurityRememberMeConfigurer -> httpSecurityRememberMeConfigurer
+                    .rememberMeParameter("remember-me")
+                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
+                    .key("appSecureKey")
+                    .userDetailsService(customUserDetailsService))
+
+            .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer
                     .logoutUrl("/logout")
                     .clearAuthentication(true)
                     .invalidateHttpSession(true)
+                    .deleteCookies("remember-me", "JSESSIONID")
                     .permitAll());
 
         return http.build();

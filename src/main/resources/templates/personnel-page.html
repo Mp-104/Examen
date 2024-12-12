@@ -9,8 +9,18 @@
 
     <form th:object="${personnel}" th:action="@{/personnel}" method="post" enctype="multipart/form-data">
 
-        <input type="file" name="imageFile" id="picture" class="file" placeholder="Bild" >
-        <input type="file" name="imageFiles" id="pictures" class="file" placeholder="Bild" multiple >
+        <label>Huvudbild
+            <input type="file" name="imageFile" id="picture" class="file" placeholder="Bild" >
+        </label>
+        <br/>
+        <br/>
+
+        <label>Bilder
+            <input type="file" name="imageFiles" id="pictures" class="file" placeholder="Bild" multiple >
+        </label>
+
+        <br/>
+        <br/>
 
         <label>Förnamn:
             <input type="text" name="firstName" th:field="*{firstName}">
@@ -57,11 +67,13 @@
 
                 <span th:text="${personnel.firstName}"></span>
 
+                <img th:src="'data:image/jpeg;base64, ' + ${personnel.image}" style="max-width: 200px">
+
                 <span th:each="image : ${personnel.images}">
                     <img th:src="'data:image/jpeg;base64, ' + ${image}" alt="image" style="max-width: 200px">
                 </span>
 
-                <img th:src="'data:image/jpeg;base64, ' + ${personnel.image}" style="max-width: 200px">
+
             </li>
 
         </ul>

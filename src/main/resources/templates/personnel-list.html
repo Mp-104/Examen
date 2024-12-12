@@ -11,6 +11,7 @@
         <li th:each="personnel : ${personnelList}">
 
             <span th:text="${personnel.firstName}"></span>
+            <img th:src="'data:image/jpeg;base64, ' + ${personnel.image}" style="max-width: 250px">
 
             <span th:each="image, index : ${personnel.images}">
                 <img th:if="${index.index == 0}" th:src="'data:image/jpeg;base64, ' + ${image}" style="max-width: 250px" >
