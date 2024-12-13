@@ -148,7 +148,8 @@ public class PersonnelController {
 
     @PostMapping("/edit")
     public String editPersonnel (@ModelAttribute Personnel personnel, Model model,
-                                 @RequestParam("imageFiles") List<MultipartFile> files) throws IOException {
+                                 @RequestParam("imageFiles") List<MultipartFile> files,
+                                 @RequestParam(value = "imageFile", required = false) MultipartFile file1) throws IOException {
 
         Personnel personnel1 = personnelService.findPersonnelById(personnel.getId()).get();
 
@@ -167,6 +168,26 @@ public class PersonnelController {
 
 
         personnel1.setFirstName(personnel.getFirstName());
+        personnel1.setLastName(personnel.getLastName());
+        personnel1.setBranch(personnel.getBranch());
+        personnel1.setCountryOfOrigin(personnel.getCountryOfOrigin());
+
+        if (file1 == null) {
+
+            personnel1.setPicture(null);
+
+        } else {
+
+            personnel1.setPicture(file1.getBytes());
+
+        }
+
+        //System.out.println("file1.getBytes(): " + Arrays.toString(file1.getBytes()));
+        //personnel1.setPicture(file1.getBytes());
+
+
+
+
 
         personnel1.setImages(images);
 

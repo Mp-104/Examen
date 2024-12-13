@@ -5,31 +5,79 @@
     <title>Personnel Info</title>
 </head>
 <body>
-    <h1>Personnel info page</h1>
+    <h1>Personnel info edit page</h1>
 
-    <h1 th:text="${personnel.firstName}"></h1>
-    <h1 th:text="${personnel.lastName}"></h1>
-    <p th:text="${personnel.id}"></p>
+    <h2 th:text="${personnel.firstName}"><span th:text="${personnel.lastName}"></span></h2>
+    <h2 th:text="${personnel.lastName}"></h2>
+    <h2 th:text="${personnel.branch}"></h2>
+    <h2 th:text="${personnel.countryOfOrigin}"></h2>
+    <h2 th:text="${personnel.id}"></h2>
 
-    <form th:action="@{/edit}" th:object="${personnel}" method="post" enctype="multipart/form-data">
-        <input type="hidden" th:field="*{id}">
-
-        <label>Bilder
-            <input type="file" name="imageFiles" id="pictures" class="file" placeholder="Bild" multiple >
-        </label>
-
-        <label>Förnamn:
-            <input type="text" th:field="*{firstName}">
-        </label>
-        <button type="submit">Ändra</button>
-
-    </form>
+    <br/>
+    <br/>
 
     <img th:src="'data:image/jpeg;base64, ' + ${personnel.image}" style="max-width: 200px">
 
     <span th:each="image : ${personnel.images}">
         <img th:src="'data:image/jpeg;base64, ' + ${image}" alt="image" style="max-width: 200px">
     </span>
+
+    <br/>
+    <br/>
+
+
+    <form th:action="@{/edit}" th:object="${personnel}" method="post" enctype="multipart/form-data">
+        <input type="hidden" th:field="*{id}">
+
+        <label sec:authorize="hasRole('ADMIN')">Huvudbild
+            <input type="file" name="imageFile" id="picture" class="file" placeholder="Bild" >
+        </label>
+        <br/>
+        <br/>
+
+        <label>Bilder
+            <input type="file" name="imageFiles" id="pictures" class="file" placeholder="Bild" multiple >
+        </label>
+        </br>
+        </br>
+
+        <label>Förnamn:
+            <input type="text" th:field="*{firstName}">
+        </label>
+        </br>
+        </br>
+
+
+        <label>Efternamn:
+            <input type="text" th:field="*{lastName}">
+        </label>
+        </br>
+        </br>
+
+        <label>Försvarsgren:
+            <input type="text" th:field="*{branch}">
+        </label>
+        </br>
+        </br>
+
+        <label>Ursprungsland:
+            <input type="text" th:field="*{countryOfOrigin}">
+        </label>
+        </br>
+        </br>
+
+
+        <button type="submit">Ändra</button>
+
+    </form>
+
+    <!--
+    <img th:src="'data:image/jpeg;base64, ' + ${personnel.image}" style="max-width: 200px">
+
+    <span th:each="image : ${personnel.images}">
+        <img th:src="'data:image/jpeg;base64, ' + ${image}" alt="image" style="max-width: 200px">
+    </span>
+    -->
 
 
 </body>

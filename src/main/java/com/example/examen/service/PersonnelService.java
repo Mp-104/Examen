@@ -36,8 +36,8 @@ public class PersonnelService implements IPersonnelService {
     public void savePersonnel(Personnel personnel) {
 
         List<String> imageList = new ArrayList<>();
-        System.out.println("personnel.getPictures(): " + personnel.getPictures());
-        System.out.println("personnel.getImages(): " + personnel.getImages());
+//        System.out.println("personnel.getPictures(): " + personnel.getPictures());
+//        System.out.println("personnel.getImages(): " + personnel.getImages());
 
 
 
@@ -47,7 +47,7 @@ public class PersonnelService implements IPersonnelService {
                 //|| !Arrays.toString(personnel.getPictures().get(0)).equals("[]")
                 //|| !Objects.equals(personnel.getImages().get(0), "[]")
         ) {
-            System.out.println("personnel.getPictures(): " + personnel.getPictures());
+            //System.out.println("personnel.getPictures(): " + personnel.getPictures());
 //            System.out.println("savePersonnel" );
 //            System.out.println("personnel.getPictures().sizer(): " + personnel.getPictures().size());
 //            System.out.println("getPictures.get(0): " + personnel.getPictures().get(0));
@@ -55,7 +55,7 @@ public class PersonnelService implements IPersonnelService {
                 String base64 = Base64.getEncoder().encodeToString(picture);
                 imageList.add(base64);
             }
-            System.out.println("imageList.size: " + imageList.size());
+            //System.out.println("imageList.size: " + imageList.size());
             if (imageList.size() > 0) {
                 System.out.println("it saved");
                 personnel.setImages(imageList);
@@ -70,6 +70,7 @@ public class PersonnelService implements IPersonnelService {
 
 
         // ----------------------------------------------------------------------------------------//
+        System.out.println("PersonnelService: personnel.getPicture(): " + Arrays.toString(personnel.getPicture()));
 
         if (personnel.getImage() == null) {
             //System.out.println("outside if: Arrays.toString(personnel.getPicture()): " + Arrays.toString(personnel.getPicture()));
@@ -86,8 +87,21 @@ public class PersonnelService implements IPersonnelService {
                 personnel.setImage(base64);
             }
 
-        }
+        } else if (Objects.equals(personnel.getImage(), placeholderImage())
+                && !Arrays.toString(personnel.getPicture()).equals("[]") && personnel.getPicture() != null
+        ) {
 
+            String base64 = Base64.getEncoder().encodeToString(personnel.getPicture());
+
+            personnel.setImage(base64);
+
+        } else if (personnel.getPicture() != null  && !Arrays.toString(personnel.getPicture()).equals("[]")) {
+
+            String base64 = Base64.getEncoder().encodeToString(personnel.getPicture());
+
+            personnel.setImage(base64);
+
+        }
 
 
         CustomUser loggedInUser = userService.findUserByUsername(getLoggedInUser()).get();
@@ -95,7 +109,7 @@ public class PersonnelService implements IPersonnelService {
         personnel.setCustomUser(loggedInUser);
 
 
-
+        //Todo - see if this can be made more efficient
         if (personnel.getImages() != null) {
 
 
@@ -116,8 +130,8 @@ public class PersonnelService implements IPersonnelService {
 
         }
 
-        System.out.println("personnel.getPictures(): what is saved: " + personnel.getPictures());
-        System.out.println("personnel.getImages(): what is saved: " + personnel.getImages());
+//        System.out.println("personnel.getPictures(): what is saved: " + personnel.getPictures());
+//        System.out.println("personnel.getImages(): what is saved: " + personnel.getImages());
         personnelRepository.save(personnel);
     }
 }
