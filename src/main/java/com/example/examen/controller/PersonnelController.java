@@ -149,11 +149,11 @@ public class PersonnelController {
     @PostMapping("/edit")
     public String editPersonnel (@ModelAttribute Personnel personnel, Model model,
                                  @RequestParam("imageFiles") List<MultipartFile> files,
-                                 @RequestParam(value = "imageFile", required = false) MultipartFile file1) throws IOException {
+                                 @RequestParam(value = "imageFile", required = false) MultipartFile multipartFile) throws IOException {
 
-        Personnel personnel1 = personnelService.findPersonnelById(personnel.getId()).get();
+        Personnel personnelToEdit = personnelService.findPersonnelById(personnel.getId()).get();
 
-        List<String> images = personnel1.getImages();
+        List<String> images = personnelToEdit.getImages();
 
         // to prevent duplicates
         Set<String> uniqueImages = new HashSet<>(images);
@@ -167,18 +167,18 @@ public class PersonnelController {
         images = new ArrayList<>(uniqueImages);
 
 
-        personnel1.setFirstName(personnel.getFirstName());
-        personnel1.setLastName(personnel.getLastName());
-        personnel1.setBranch(personnel.getBranch());
-        personnel1.setCountryOfOrigin(personnel.getCountryOfOrigin());
+        personnelToEdit.setFirstName(personnel.getFirstName());
+        personnelToEdit.setLastName(personnel.getLastName());
+        personnelToEdit.setBranch(personnel.getBranch());
+        personnelToEdit.setCountryOfOrigin(personnel.getCountryOfOrigin());
 
-        if (file1 == null) {
+        if (multipartFile == null) {
 
-            personnel1.setPicture(null);
+            personnelToEdit.setPicture(null);
 
         } else {
 
-            personnel1.setPicture(file1.getBytes());
+            personnelToEdit.setPicture(multipartFile.getBytes());
 
         }
 
@@ -189,11 +189,11 @@ public class PersonnelController {
 
 
 
-        personnel1.setImages(images);
+        personnelToEdit.setImages(images);
 
-        personnelService.savePersonnel(personnel1);
+        personnelService.savePersonnel(personnelToEdit);
 
-        model.addAttribute("personnel", personnel1);
+        model.addAttribute("personnel", personnelToEdit);
 
         return "personnel-info-page";
 
