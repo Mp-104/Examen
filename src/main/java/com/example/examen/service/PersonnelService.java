@@ -5,11 +5,9 @@ import com.example.examen.model.Personnel;
 import com.example.examen.repository.PersonnelRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+import static com.example.examen.placeholder.Placeholder.placeholderImage;
 import static com.example.examen.principal.MyPrincipal.getLoggedInUser;
 
 @Service
@@ -38,12 +36,21 @@ public class PersonnelService implements IPersonnelService {
     public void savePersonnel(Personnel personnel) {
 
         List<String> imageList = new ArrayList<>();
+        System.out.println("personnel.getPictures(): " + personnel.getPictures());
+        System.out.println("personnel.getImages(): " + personnel.getImages());
 
-        //TODO fix so it does not saves empty values
-        if (personnel.getImages() == null && personnel.getPictures() != null) {
-            System.out.println("savePersonnel" );
-            System.out.println("personnel.getPictures().sizer(): " + personnel.getPictures().size());
-            System.out.println("getPictures.get(0): " + personnel.getPictures().get(0));
+
+
+
+        //TODO fix so it does not saves empty values - fixed in Controller
+        if (personnel.getImages() == null && personnel.getPictures() != null
+                //|| !Arrays.toString(personnel.getPictures().get(0)).equals("[]")
+                //|| !Objects.equals(personnel.getImages().get(0), "[]")
+        ) {
+            System.out.println("personnel.getPictures(): " + personnel.getPictures());
+//            System.out.println("savePersonnel" );
+//            System.out.println("personnel.getPictures().sizer(): " + personnel.getPictures().size());
+//            System.out.println("getPictures.get(0): " + personnel.getPictures().get(0));
             for (byte[] picture : personnel.getPictures()) {
                 String base64 = Base64.getEncoder().encodeToString(picture);
                 imageList.add(base64);
@@ -65,9 +72,20 @@ public class PersonnelService implements IPersonnelService {
         // ----------------------------------------------------------------------------------------//
 
         if (personnel.getImage() == null) {
-            String base64 = Base64.getEncoder().encodeToString(personnel.getPicture());
+            //System.out.println("outside if: Arrays.toString(personnel.getPicture()): " + Arrays.toString(personnel.getPicture()));
 
-            personnel.setImage(base64);
+            if (Arrays.toString(personnel.getPicture()).equals("[]")) {
+                //System.out.println("inside if: Arrays.toString(personnel.getPicture()): " + Arrays.toString(personnel.getPicture()));
+
+                personnel.setImage(placeholderImage());
+
+            } else {
+
+                String base64 = Base64.getEncoder().encodeToString(personnel.getPicture());
+
+                personnel.setImage(base64);
+            }
+
         }
 
 
@@ -76,6 +94,30 @@ public class PersonnelService implements IPersonnelService {
 
         personnel.setCustomUser(loggedInUser);
 
+
+
+        if (personnel.getImages() != null) {
+
+
+            if (Objects.equals(personnel.getImages().toString(), "[]") || personnel.getImages().get(0).isBlank()) {
+
+
+                if (personnel.getImages().size() > 1) {
+
+                    personnel.getImages().remove(0);
+
+                    personnel.setImages(personnel.getImages());
+
+                } else {
+                    personnel.setImages(null);
+                }
+
+            }
+
+        }
+
+        System.out.println("personnel.getPictures(): what is saved: " + personnel.getPictures());
+        System.out.println("personnel.getImages(): what is saved: " + personnel.getImages());
         personnelRepository.save(personnel);
     }
 }
