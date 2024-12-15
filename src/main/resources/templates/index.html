@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Index</title>
 </head>
 <body>
     <h1>Index page</h1>
+    <br/>
+    <a href="/random">See random fact</a>
 
     <div>
         <a sec:authorize="isAnonymous()" href="/login"><button>Logga in</button></a>
