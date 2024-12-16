@@ -11,8 +11,11 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public ResponseEntity<String> handleMaxSizeException (MaxUploadSizeExceededException exception) {
+    public String handleMaxSizeException () {
 
-        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("för stor fil");
+        return "error-page";
     }
+
+
+
 }

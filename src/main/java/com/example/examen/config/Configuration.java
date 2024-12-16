@@ -8,12 +8,12 @@ import org.springframework.util.unit.DataSize;
 @org.springframework.context.annotation.Configuration
 public class Configuration {
 
-    // Sets maximum upload size of files to 10 MB, default is 1 MB
+    // Configures maximum upload size of files, default is 1 MB
     @Bean
     public MultipartConfigElement configElement () {
 
         MultipartConfigFactory configFactory = new MultipartConfigFactory();
-        configFactory.setMaxFileSize(DataSize.parse("1MB"));
+        configFactory.setMaxFileSize(DataSize.parse("5MB"));
         configFactory.setMaxRequestSize(DataSize.parse("10MB"));
 
         return configFactory.createMultipartConfig();

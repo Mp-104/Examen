@@ -7,6 +7,7 @@ import com.example.examen.service.IUserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -144,7 +145,15 @@ public class PersonnelController {
                                  @RequestParam("imageFiles") List<MultipartFile> files,
                                  @RequestParam(value = "imageFile", required = false) MultipartFile multipartFile) throws IOException {
 
+
         Personnel personnelToEdit = personnelService.findPersonnelById(personnel.getId()).get();
+
+        if(multipartFile.getSize() > 3000000) {
+
+            model.addAttribute("error", "fil för stor");
+            model.addAttribute("personnel", personnelToEdit);
+            return "personnel-info-page";
+        }
 
         System.out.println("PersonnelController, editPersonnel: multipartFile.getSize(): " + multipartFile.getSize() + " bytes");
         List<String> images = personnelToEdit.getImages();
@@ -180,9 +189,6 @@ public class PersonnelController {
         //personnel1.setPicture(file1.getBytes());
 
 
-
-
-
         personnelToEdit.setImages(images);
 
         personnelService.savePersonnel(personnelToEdit);
@@ -193,6 +199,10 @@ public class PersonnelController {
 
     }
 
-
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public String handleFileSizeException (MaxUploadSizeExceededException exception, Model model) {
+        model.addAttribute("error", "fil för stor");
+        return "personnel-info-page";
+    }
 
 }

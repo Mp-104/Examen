@@ -33,7 +33,8 @@
             <input type="file" name="imageFile" id="picture" class="file" placeholder="Bild" >
         </label>
         <br/>
-        <br/>
+
+        <p th:if="${error}" th:text="${error}" style="color: red"></p>
 
         <label>Bilder
             <input type="file" name="imageFiles" id="pictures" class="file" placeholder="Bild" multiple >
