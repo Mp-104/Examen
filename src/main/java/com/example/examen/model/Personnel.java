@@ -48,6 +48,7 @@ public class Personnel {
     private String branch;
     private String homeAddress;
     private String countryAllegiance;
+    private String description;
 
     @Lob
     @Transient
@@ -127,6 +128,14 @@ public class Personnel {
 
     public void setCountryAllegiance(String countryAllegiance) {
         this.countryAllegiance = countryAllegiance;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public CustomUser getCustomUser() {

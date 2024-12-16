@@ -41,11 +41,20 @@
         <br/>
         <br/>
 
+        <label>Rank:
+            <input type="text" name="rank" th:field="*{rank}">
+        </label>
+        <br/>
+        <br/>
+
         <!--
         <label>Land:
             <input type="text" name="countryAllegiance" th:field="*{countryAllegiance}">
         </label>
         -->
+        <label>Hemadress:
+            <input type="text" name="homeAddress" th:field="*{homeAddress}">
+        </label>
 
         <label>Land:
             <select th:field="*{countryAllegiance}">
@@ -55,8 +64,11 @@
         <br/>
         <br/>
 
-
-
+        <label>Beskrivning:
+            <textarea th:field="*{description}"></textarea>
+        </label>
+        <br/>
+        <br/>
 
         <button type="submit">Lägg till</button>
     </form>
@@ -98,6 +110,7 @@
                     <input type="hidden" th:name="homeAddress" th:value="${personnel.homeAddress}">
                     <input type="hidden" th:name="countryAllegiance" th:value="${personnel.countryAllegiance}">
                     <input type="hidden" th:name="image" th:value="${personnel.image}">
+                    <input type="hidden" th:name="description" th:value="${personnel.description}">
 
                     <!-- parsing images directly such as:
                     <input type="hidden" th:name="images" th:value="${personnel.images}" >

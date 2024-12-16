@@ -12,6 +12,8 @@
     <h2 th:text="${personnel.branch}"></h2>
     <h2 th:text="${personnel.countryAllegiance}"></h2>
     <h2 th:text="${personnel.id}"></h2>
+    <h2 th:text="${personnel.rank}"></h2>
+    <h2 th:text="${personnel.homeAddress}"></h2>
 
     <br/>
     <br/>
@@ -21,6 +23,8 @@
     <span th:each="image : ${personnel.images}">
         <img th:src="'data:image/jpeg;base64, ' + ${image}" alt="image" style="max-width: 200px">
     </span>
+
+    <span th:text="${personnel.description}"></span>
 
     <br/>
     <br/>
@@ -61,6 +65,16 @@
         </br>
         </br>
 
+        <label>Rank:
+            <input type="text" th:field="*{rank}">
+        </label>
+        <br/>
+        <br/>
+
+        <label>Hemadress:
+            <input type="text" th:field="*{homeAddress}">
+        </label>
+
         <label>Land:
             <select th:field="*{countryAllegiance}">
                 <option th:each="index : ${countries}" th:value="${index}" th:text="${index}"></option>
@@ -68,6 +82,12 @@
         </label>
         </br>
         </br>
+
+        <label>Beskrivning:
+            <textarea th:field="*{description}"></textarea>
+        </label>
+        <br/>
+        <br/>
 
 
         <button type="submit">Ändra</button>
