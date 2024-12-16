@@ -70,7 +70,7 @@ public class PersonnelService implements IPersonnelService {
 
 
         // ----------------------------------------------------------------------------------------//
-        System.out.println("PersonnelService: personnel.getPicture(): " + Arrays.toString(personnel.getPicture()));
+        //System.out.println("PersonnelService: personnel.getPicture(): " + Arrays.toString(personnel.getPicture()));
 
         if (personnel.getImage() == null) {
             //System.out.println("outside if: Arrays.toString(personnel.getPicture()): " + Arrays.toString(personnel.getPicture()));

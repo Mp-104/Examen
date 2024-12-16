@@ -10,7 +10,7 @@
     <h2 th:text="${personnel.firstName}"><span th:text="${personnel.lastName}"></span></h2>
     <h2 th:text="${personnel.lastName}"></h2>
     <h2 th:text="${personnel.branch}"></h2>
-    <h2 th:text="${personnel.countryOfOrigin}"></h2>
+    <h2 th:text="${personnel.countryAllegiance}"></h2>
     <h2 th:text="${personnel.id}"></h2>
 
     <br/>
@@ -60,8 +60,8 @@
         </br>
         </br>
 
-        <label>Ursprungsland:
-            <input type="text" th:field="*{countryOfOrigin}">
+        <label>Land:
+            <input type="text" th:field="*{countryAllegiance}">
         </label>
         </br>
         </br>

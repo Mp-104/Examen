@@ -2,8 +2,6 @@ package com.example.examen.controller;
 
 import com.example.examen.model.CustomUser;
 import com.example.examen.model.Personnel;
-import com.example.examen.principal.MyPrincipal;
-import com.example.examen.repository.PersonnelRepository;
 import com.example.examen.service.IPersonnelService;
 import com.example.examen.service.IUserService;
 import org.springframework.stereotype.Controller;
@@ -12,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 import static com.example.examen.principal.MyPrincipal.getLoggedInUser;
@@ -34,9 +30,6 @@ public class PersonnelController {
 
     @GetMapping("/personnel")
     public String getPersonalPage (Model model) {
-
-        List<Personnel> personnelList = personnelService.findAll();
-
 
         CustomUser loggedInUser = userService.findUserByUsername(
                 getLoggedInUser()
@@ -153,6 +146,7 @@ public class PersonnelController {
 
         Personnel personnelToEdit = personnelService.findPersonnelById(personnel.getId()).get();
 
+        System.out.println("PersonnelController, editPersonnel: multipartFile.getSize(): " + multipartFile.getSize() + " bytes");
         List<String> images = personnelToEdit.getImages();
 
         // to prevent duplicates
@@ -170,7 +164,7 @@ public class PersonnelController {
         personnelToEdit.setFirstName(personnel.getFirstName());
         personnelToEdit.setLastName(personnel.getLastName());
         personnelToEdit.setBranch(personnel.getBranch());
-        personnelToEdit.setCountryOfOrigin(personnel.getCountryOfOrigin());
+        personnelToEdit.setCountryAllegiance(personnel.getCountryAllegiance());
 
         if (multipartFile == null) {
 

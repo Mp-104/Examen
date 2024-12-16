@@ -1,7 +1,6 @@
 package com.example.examen.model;
 
 import jakarta.persistence.*;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ public class Personnel {
                      String rank,
                      String branch,
                      String homeAddress,
-                     String countryOfOrigin,
+                     String countryAllegiance,
                      byte[] picture,
                      List<byte[]> pictures,
                      String image,
@@ -28,7 +27,7 @@ public class Personnel {
         this.rank = rank;
         this.branch = branch;
         this.homeAddress = homeAddress;
-        this.countryOfOrigin = countryOfOrigin;
+        this.countryAllegiance = countryAllegiance;
         this.picture = picture;
         this.pictures = pictures;
         this.image = image;
@@ -48,7 +47,7 @@ public class Personnel {
     private String rank;
     private String branch;
     private String homeAddress;
-    private String countryOfOrigin;
+    private String countryAllegiance;
 
     @Lob
     @Transient
@@ -122,12 +121,12 @@ public class Personnel {
         this.homeAddress = homeAddress;
     }
 
-    public String getCountryOfOrigin() {
-        return countryOfOrigin;
+    public String getCountryAllegiance() {
+        return countryAllegiance;
     }
 
-    public void setCountryOfOrigin(String countryOfOrigin) {
-        this.countryOfOrigin = countryOfOrigin;
+    public void setCountryAllegiance(String countryAllegiance) {
+        this.countryAllegiance = countryAllegiance;
     }
 
     public CustomUser getCustomUser() {
