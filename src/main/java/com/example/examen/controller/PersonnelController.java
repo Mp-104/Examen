@@ -1,5 +1,6 @@
 package com.example.examen.controller;
 
+import com.example.examen.countries.NatoCountries;
 import com.example.examen.model.CustomUser;
 import com.example.examen.model.Personnel;
 import com.example.examen.service.IPersonnelService;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.*;
 
+import static com.example.examen.countries.NatoCountries.getAllNatoCountries;
 import static com.example.examen.principal.MyPrincipal.getLoggedInUser;
 
 @Controller
@@ -46,6 +48,9 @@ public class PersonnelController {
 
         model.addAttribute("personnel", new Personnel());
         model.addAttribute("personnelList", usersPersonnelList);
+
+        model.addAttribute("countries", getAllNatoCountries());
+
         return "personnel-page";
     }
 
@@ -91,6 +96,9 @@ public class PersonnelController {
         model.addAttribute("personnel", new Personnel());
         model.addAttribute("personnelList", usersPersonnelList);
 
+        List<String> countries = new ArrayList<>(List.of("USA", "UK", "Germany", "France"));
+        model.addAttribute("countries", getAllNatoCountries());
+
         //return "redirect:/personnel";
         return "personnel-page";
 
@@ -122,6 +130,8 @@ public class PersonnelController {
 //    }
 
 
+
+
     @PostMapping("/personnel-info")
     public String personnelInfoPage2 (@ModelAttribute("personnel") Personnel personnel, Model model) {
 
@@ -136,6 +146,7 @@ public class PersonnelController {
 
 
         model.addAttribute("personnel", personnel);
+        model.addAttribute("countries", getAllNatoCountries());
         return "personnel-info-page";
 
     }
@@ -194,15 +205,16 @@ public class PersonnelController {
         personnelService.savePersonnel(personnelToEdit);
 
         model.addAttribute("personnel", personnelToEdit);
+        model.addAttribute("countries", getAllNatoCountries());
 
         return "personnel-info-page";
 
     }
 
-    @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public String handleFileSizeException (MaxUploadSizeExceededException exception, Model model) {
-        model.addAttribute("error", "fil för stor");
-        return "personnel-info-page";
-    }
+//    @ExceptionHandler(MaxUploadSizeExceededException.class)
+//    public String handleFileSizeException (MaxUploadSizeExceededException exception, Model model) {
+//        model.addAttribute("error", "fil för stor");
+//        return "personnel-info-page";
+//    }
 
 }

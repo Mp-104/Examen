@@ -62,7 +62,9 @@
         </br>
 
         <label>Land:
-            <input type="text" th:field="*{countryAllegiance}">
+            <select th:field="*{countryAllegiance}">
+                <option th:each="index : ${countries}" th:value="${index}" th:text="${index}"></option>
+            </select>
         </label>
         </br>
         </br>

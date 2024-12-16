@@ -41,9 +41,16 @@
         <br/>
         <br/>
 
-
+        <!--
         <label>Land:
             <input type="text" name="countryAllegiance" th:field="*{countryAllegiance}">
+        </label>
+        -->
+
+        <label>Land:
+            <select th:field="*{countryAllegiance}">
+                <option th:each="index : ${countries}" th:value="${index}" th:text="${index}"></option>
+            </select>
         </label>
         <br/>
         <br/>
