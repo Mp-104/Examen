@@ -3,6 +3,7 @@ package com.example.examen.service;
 import com.example.examen.dto.UserDTO;
 import com.example.examen.model.CustomUser;
 import com.example.examen.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +21,15 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
+    @org.springframework.transaction.annotation.Transactional
     public Optional<CustomUser> findUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
     @Override
+    @Transactional
+    @org.springframework.transaction.annotation.Transactional
     public String saveUser(UserDTO user) {
 
         try {

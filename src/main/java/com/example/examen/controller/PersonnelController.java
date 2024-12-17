@@ -5,6 +5,7 @@ import com.example.examen.model.CustomUser;
 import com.example.examen.model.Personnel;
 import com.example.examen.service.IPersonnelService;
 import com.example.examen.service.IUserService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,7 @@ public class PersonnelController {
 
 
     @GetMapping("/personnel")
+    @Transactional
     public String getPersonalPage (Model model) {
 
         CustomUser loggedInUser = userService.findUserByUsername(
@@ -130,6 +132,7 @@ public class PersonnelController {
     @PostMapping("/personnel-info")
     public String personnelInfoPage (@ModelAttribute("personnel") Personnel personnel, Model model) {
 
+        Personnel foundPersonnel = personnelService.findPersonnelById(personnel.getId()).get();
         System.out.println("POST----- PersonnelController -- personnelInfoPage ----POST ");
 //        System.out.println("personnel.getFirstName: " + personnel.getFirstName());
 //        System.out.println("getImages.size: " + personnel.getImages().size());
@@ -140,7 +143,8 @@ public class PersonnelController {
         //String image = personnel.getImages().get(0);
 
 
-        model.addAttribute("personnel", personnel);
+        //model.addAttribute("personnel", personnel);
+        model.addAttribute("personnel", foundPersonnel);
         model.addAttribute("countries", getAllNatoCountries());
         return "personnel-info-page";
 
@@ -154,15 +158,20 @@ public class PersonnelController {
 
         Personnel personnelToEdit = personnelService.findPersonnelById(personnel.getId()).get();
 
-        if(multipartFile.getSize() > 1500000 || files.stream().anyMatch(file -> file.getSize() > 1500000)) {
+        if (files != null && multipartFile !=null) {
 
-            model.addAttribute("error", "fil för stor, får inte vara större än 1,5 MB");
-            model.addAttribute("personnel", personnelToEdit);
-            model.addAttribute("countries", getAllNatoCountries());
-            return "personnel-info-page";
+            if(multipartFile.getSize() > 1500000 || files.stream().anyMatch(file -> file.getSize() > 1500000)) {
+
+                model.addAttribute("error", "fil för stor, får inte vara större än 1,5 MB");
+                model.addAttribute("personnel", personnelToEdit);
+                model.addAttribute("countries", getAllNatoCountries());
+                return "personnel-info-page";
+            }
         }
 
-        System.out.println("PersonnelController, editPersonnel: multipartFile.getSize(): " + multipartFile.getSize() + " bytes");
+
+
+        //System.out.println("PersonnelController, editPersonnel: multipartFile.getSize(): " + multipartFile.getSize() + " bytes");
         List<String> images = personnelToEdit.getImages();
 
         // to prevent duplicates

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>All Personnel</title>
@@ -16,6 +16,12 @@
             <span th:each="image, index : ${personnel.images}">
                 <img th:if="${index.index == 0}" th:src="'data:image/jpeg;base64, ' + ${image}" style="max-width: 250px" >
             </span>
+
+            <form sec:authorize="hasRole('ADMIN')" th:action="@{/personnel-info}" th:object="${personnel}" method="post" >
+                <input type="hidden" th:name="id" th:value="${personnel.id}">
+
+                <button type="submit">Redigera</button>
+            </form>
 
         </li>
     </ul>

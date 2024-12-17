@@ -3,6 +3,7 @@ package com.example.examen.service;
 import com.example.examen.model.CustomUser;
 import com.example.examen.model.Personnel;
 import com.example.examen.repository.PersonnelRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -23,16 +24,23 @@ public class PersonnelService implements IPersonnelService {
     }
 
     @Override
+    @Transactional
+    @org.springframework.transaction.annotation.Transactional
     public List<Personnel> findAll() {
         return personnelRepository.findAll();
     }
 
     @Override
+    @Transactional
+    @org.springframework.transaction.annotation.Transactional
+    //@org.springframework.transaction.annotation.Transactional
     public Optional<Personnel> findPersonnelById(Long id) {
         return personnelRepository.findById(id);
     }
 
     @Override
+    @Transactional
+    @org.springframework.transaction.annotation.Transactional
     public void savePersonnel(Personnel personnel) {
 
         List<String> imageList = new ArrayList<>();
@@ -103,10 +111,13 @@ public class PersonnelService implements IPersonnelService {
 
         }
 
+        if (personnel.getCustomUser() == null) {
+            CustomUser loggedInUser = userService.findUserByUsername(getLoggedInUser()).get();
 
-        CustomUser loggedInUser = userService.findUserByUsername(getLoggedInUser()).get();
+            personnel.setCustomUser(loggedInUser);
+        }
 
-        personnel.setCustomUser(loggedInUser);
+
 
 
         //Todo - see if this can be made more efficient

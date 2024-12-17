@@ -51,11 +51,13 @@ public class Personnel {
     private String description;
 
     @Lob
+    @Basic(fetch = FetchType.EAGER)
     @Transient
     private byte[] picture;
 
     @Lob
-    @ElementCollection(fetch = FetchType.LAZY)
+    @Basic(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "personnel_pictures", joinColumns = @JoinColumn(name = "personnel_id"))
     @Column(name = "picture")
     @Transient
@@ -63,14 +65,17 @@ public class Personnel {
 
 
     @Lob
+    @Basic(fetch = FetchType.EAGER)
     private String image;
     @Lob
-    @ElementCollection(fetch = FetchType.LAZY)
+    @Basic(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name= "personnel_images", joinColumns = @JoinColumn(name = "personnel_id"))
     @Column(name= "image")
     private List<String> images;
 
     @ManyToOne
+    @Basic(fetch = FetchType.EAGER)
     @JoinColumn(name = "custom_user_id")
     private CustomUser customUser;
 
