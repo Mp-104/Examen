@@ -110,7 +110,7 @@ public class PersonnelController {
 
         model.addAttribute("added", "Tillagt: " + personnel.getFirstName());
         model.addAttribute("personnel", new Personnel());
-        //model.addAttribute("personnelList", usersPersonnelList);
+        model.addAttribute("personnelList", usersPersonnelList);
 
         model.addAttribute("countries", getAllNatoCountries());
 
