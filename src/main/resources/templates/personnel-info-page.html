@@ -38,11 +38,12 @@
         </label>
         <br/>
 
-        <p th:if="${error}" th:text="${error}" style="color: red"></p>
+
 
         <label>Bilder
             <input type="file" name="imageFiles" id="pictures" class="file" placeholder="Bild" multiple >
         </label>
+        <p th:if="${error}" th:text="${error}" style="color: red"></p>
         </br>
         </br>
 

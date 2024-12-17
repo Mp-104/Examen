@@ -62,6 +62,26 @@ public class PersonnelController {
     ) throws IOException {
 
         // Todo - clean up and move to service class
+        CustomUser loggedInUser = userService.findUserByUsername(
+                getLoggedInUser()
+                //"test"
+        ).get();
+
+        List<Personnel> usersPersonnelList = loggedInUser.getPersonnelList();
+
+        // Checks if file or one of the files is over 3000000 bytes (3 MB) in size
+        if (file.getSize() > 3000000 || files.stream().anyMatch( multipartFile -> multipartFile.getSize() > 3000000) ) {
+
+            model.addAttribute("personnel", new Personnel());
+            model.addAttribute("personnelList", usersPersonnelList);
+
+            model.addAttribute("countries", getAllNatoCountries());
+
+            model.addAttribute("error", "fil för stor, får inte vara större än 3 MB");
+
+            //return "redirect:/personnel";
+            return "personnel-page";
+        }
 
         List<byte[]> pictures = new ArrayList<>();
         // Checks to see if it's empty
@@ -84,12 +104,6 @@ public class PersonnelController {
         personnel.setPicture(file.getBytes()); // file refers to the one acquired in the personnel-page.html form with the name: "imageFile", which is an input with type = "file"
 
         personnelService.savePersonnel(personnel);
-
-        CustomUser loggedInUser = userService.findUserByUsername(
-                getLoggedInUser()
-                //"test"
-        ).get();
-        List<Personnel> usersPersonnelList = loggedInUser.getPersonnelList();
 
 
         model.addAttribute("added", "Tillagt: " + personnel.getFirstName());
@@ -140,10 +154,11 @@ public class PersonnelController {
 
         Personnel personnelToEdit = personnelService.findPersonnelById(personnel.getId()).get();
 
-        if(multipartFile.getSize() > 3000000) {
+        if(multipartFile.getSize() > 3000000 || files.stream().anyMatch(file -> file.getSize() > 3000000)) {
 
-            model.addAttribute("error", "fil för stor");
+            model.addAttribute("error", "fil för stor, får inte vara större än 3 MB");
             model.addAttribute("personnel", personnelToEdit);
+            model.addAttribute("countries", getAllNatoCountries());
             return "personnel-info-page";
         }
 
