@@ -69,15 +69,15 @@ public class PersonnelController {
 
         List<Personnel> usersPersonnelList = loggedInUser.getPersonnelList();
 
-        // Checks if file or one of the files is over 3000000 bytes (3 MB) in size
-        if (file.getSize() > 3000000 || files.stream().anyMatch( multipartFile -> multipartFile.getSize() > 3000000) ) {
+        // Checks if file or one of the files is over 1500000 bytes (1,5 MB) in size
+        if (file.getSize() > 1500000 || files.stream().anyMatch( multipartFile -> multipartFile.getSize() > 1500000) ) {
 
             model.addAttribute("personnel", new Personnel());
             model.addAttribute("personnelList", usersPersonnelList);
 
             model.addAttribute("countries", getAllNatoCountries());
 
-            model.addAttribute("error", "fil för stor, får inte vara större än 3 MB");
+            model.addAttribute("error", "fil för stor, får inte vara större än 1,5 MB");
 
             //return "redirect:/personnel";
             return "personnel-page";
@@ -154,9 +154,9 @@ public class PersonnelController {
 
         Personnel personnelToEdit = personnelService.findPersonnelById(personnel.getId()).get();
 
-        if(multipartFile.getSize() > 3000000 || files.stream().anyMatch(file -> file.getSize() > 3000000)) {
+        if(multipartFile.getSize() > 1500000 || files.stream().anyMatch(file -> file.getSize() > 1500000)) {
 
-            model.addAttribute("error", "fil för stor, får inte vara större än 3 MB");
+            model.addAttribute("error", "fil för stor, får inte vara större än 1,5 MB");
             model.addAttribute("personnel", personnelToEdit);
             model.addAttribute("countries", getAllNatoCountries());
             return "personnel-info-page";

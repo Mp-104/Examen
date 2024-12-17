@@ -18,7 +18,12 @@
     <br/>
     <br/>
 
+
     <img th:src="'data:image/jpeg;base64, ' + ${personnel.image}" style="max-width: 200px">
+
+    <!--
+    <img th:src="'/getimage/'+ ${personnel.id}" style="max-width: 200px">
+    -->
 
     <span th:each="image : ${personnel.images}">
         <img th:src="'data:image/jpeg;base64, ' + ${image}" alt="image" style="max-width: 200px">
