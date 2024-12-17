@@ -12,6 +12,7 @@ import static com.example.examen.placeholder.Placeholder.placeholderImage;
 import static com.example.examen.principal.MyPrincipal.getLoggedInUser;
 
 @Service
+@Transactional
 public class PersonnelService implements IPersonnelService {
 
     private final IUserService userService;
@@ -24,23 +25,17 @@ public class PersonnelService implements IPersonnelService {
     }
 
     @Override
-    @Transactional
-    @org.springframework.transaction.annotation.Transactional
     public List<Personnel> findAll() {
         return personnelRepository.findAll();
     }
 
     @Override
-    @Transactional
-    @org.springframework.transaction.annotation.Transactional
     //@org.springframework.transaction.annotation.Transactional
     public Optional<Personnel> findPersonnelById(Long id) {
         return personnelRepository.findById(id);
     }
 
     @Override
-    @Transactional
-    @org.springframework.transaction.annotation.Transactional
     public void savePersonnel(Personnel personnel) {
 
         List<String> imageList = new ArrayList<>();

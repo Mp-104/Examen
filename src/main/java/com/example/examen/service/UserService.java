@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
@@ -21,15 +22,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    @Transactional
-    @org.springframework.transaction.annotation.Transactional
     public Optional<CustomUser> findUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
     @Override
-    @Transactional
-    @org.springframework.transaction.annotation.Transactional
     public String saveUser(UserDTO user) {
 
         try {

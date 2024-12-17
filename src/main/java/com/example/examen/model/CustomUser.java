@@ -19,7 +19,9 @@ public class CustomUser {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    @OneToMany(mappedBy = "customUser", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customUser", cascade = CascadeType.ALL
+            , fetch = FetchType.EAGER // This solved Large object auto-commit!!
+    )
     private List<Personnel> personnelList;
 
 

@@ -75,7 +75,7 @@ public class PersonnelController {
         if (file.getSize() > 1500000 || files.stream().anyMatch( multipartFile -> multipartFile.getSize() > 1500000) ) {
 
             model.addAttribute("personnel", new Personnel());
-            model.addAttribute("personnelList", usersPersonnelList);
+            //model.addAttribute("personnelList", usersPersonnelList);
 
             model.addAttribute("countries", getAllNatoCountries());
 
@@ -110,7 +110,7 @@ public class PersonnelController {
 
         model.addAttribute("added", "Tillagt: " + personnel.getFirstName());
         model.addAttribute("personnel", new Personnel());
-        model.addAttribute("personnelList", usersPersonnelList);
+        //model.addAttribute("personnelList", usersPersonnelList);
 
         model.addAttribute("countries", getAllNatoCountries());
 
@@ -130,6 +130,7 @@ public class PersonnelController {
 
 
     @PostMapping("/personnel-info")
+    //@Transactional
     public String personnelInfoPage (@ModelAttribute("personnel") Personnel personnel, Model model) {
 
         Personnel foundPersonnel = personnelService.findPersonnelById(personnel.getId()).get();

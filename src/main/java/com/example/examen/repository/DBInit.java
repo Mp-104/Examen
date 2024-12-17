@@ -7,6 +7,7 @@ import com.example.examen.service.IUserService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
+/*
 @Component
 public class DBInit {
 
@@ -18,7 +19,7 @@ public class DBInit {
         this.userService = userService;
     }
 
-    /*
+
     @PostConstruct
     public void createUser () {
 
@@ -34,5 +35,7 @@ public class DBInit {
 
     }
 
-     */
+
 }
+
+ */

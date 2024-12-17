@@ -67,6 +67,7 @@ public class Personnel {
     @Lob
     @Basic(fetch = FetchType.EAGER)
     private String image;
+
     @Lob
     @Basic(fetch = FetchType.EAGER)
     @ElementCollection(fetch = FetchType.EAGER)
