@@ -144,7 +144,7 @@ public class PersonnelController {
         //String image = personnel.getImages().get(0);
 
 
-        //model.addAttribute("personnel", personnel);
+        model.addAttribute("personnel", personnel);
         model.addAttribute("personnel", foundPersonnel);
         model.addAttribute("countries", getAllNatoCountries());
         return "personnel-info-page";
