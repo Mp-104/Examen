@@ -10,18 +10,22 @@
     <br/>
     <a href="/random">See random fact</a>
     <br/>
-    <a href="/register"><button>Registrera</button></a>
     <br/>
 
+    <div sec:authorize="isAnonymous()">
+        <a href="/register"><button>Registrera</button></a>
+        <br/>
+    </div>
+
+
     <div>
+        <br/>
         <a sec:authorize="isAnonymous()" href="/login"><button>Logga in</button></a>
 
         <form sec:authorize="hasAuthority('GET')" th:action="@{/logout}" method="post">
             <button type="submit">Logga ut</button>
         </form>
     </div>
-
-    <br/>
     <br/>
 
     <a href="/allpersonnel">Se alla personnel</a>
@@ -32,13 +36,12 @@
     <div sec:authorize="hasAuthority('POST')">
         <a href="/personnel"><button>Lägg till uppgifter</button></a>
     </div>
+    <br/>
+    <br/>
 
     <div sec:authorize="hasRole('USER')">
         <a href="/user"><button>Gå till användarsidan</button></a>
     </div>
-
-
-
 
 
 

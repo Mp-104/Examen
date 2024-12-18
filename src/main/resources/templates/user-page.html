@@ -10,6 +10,20 @@
     <div sec:authorize="hasAuthority('POST')">
         <a href="/personnel"><button>Lägg till uppgifter</button></a>
     </div>
+    <br/>
+
+    <div>
+        <a href="/changePassword"><button>Ändra lösenord</button></a>
+    </div>
+    <br/>
+
+    <div>
+        <form th:action="@{/user}" method="post">
+
+            <button type="submit">Lås konto</button>
+
+        </form>
+    </div>
 
 </body>
 </html>

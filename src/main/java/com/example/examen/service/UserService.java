@@ -1,8 +1,11 @@
 package com.example.examen.service;
 
 import com.example.examen.authorities.UserRole;
+import com.example.examen.dao.IUserDAO;
+import com.example.examen.dto.PasswordDT0;
 import com.example.examen.dto.UserDTO;
 import com.example.examen.model.CustomUser;
+import com.example.examen.principal.MyPrincipal;
 import com.example.examen.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,28 +13,30 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.example.examen.principal.MyPrincipal.getLoggedInUser;
+
 @Service
 @Transactional
 public class UserService implements IUserService {
 
-    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final IUserDAO userDAO;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+    public UserService(PasswordEncoder passwordEncoder, IUserDAO userDAO) {
         this.passwordEncoder = passwordEncoder;
+        this.userDAO = userDAO;
     }
 
     @Override
     public Optional<CustomUser> findUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userDAO.findByUsername(username);
     }
 
     @Override
     public String saveUser(UserDTO user) {
 
         try {
-            if (userRepository.findByUsername(user.username()).isEmpty()) {
+            if (userDAO.findByUsername(user.username()).isEmpty()) {
 
                 CustomUser newUser = new CustomUser(user.username(), passwordEncoder.encode(user.password()), UserRole.USER);
 
@@ -42,7 +47,7 @@ public class UserService implements IUserService {
                 newUser.setAccountNonExpired(true);
                 newUser.setCredentialNonExpired(true);
 
-                userRepository.save(newUser);
+                userDAO.save(newUser);
 
                 return "Användare: " + user.username() + " registrerad";
 
@@ -53,6 +58,32 @@ public class UserService implements IUserService {
         } catch (Exception e) {
             return e.getMessage();
         }
+
+    }
+
+    @Override
+    public String changePassword(PasswordDT0 password) {
+
+        CustomUser user = findUserByUsername(getLoggedInUser()).get();
+
+        if (passwordEncoder.matches(password.currentPassword(), user.getPassword())) {
+
+            user.setPassword(passwordEncoder.encode(password.newPassword()));
+            //userDAO.save(user);
+
+            return "Lösenord ändrat!";
+        }
+
+        return "Fel lösenord angivet";
+
+    }
+
+    @Override
+    public void disableUser() {
+
+        CustomUser user = findUserByUsername(getLoggedInUser()).get();
+
+        user.setEnabled(false);
 
     }
 }
