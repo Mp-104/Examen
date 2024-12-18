@@ -22,6 +22,8 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/random").permitAll()
+                        .requestMatchers("/error").permitAll()
+                        .requestMatchers("/register").permitAll()
                         .requestMatchers("/personnel", "/personnel-info").hasAuthority("POST")
                         .requestMatchers("/allpersonnel").permitAll()
                         .anyRequest().authenticated())
