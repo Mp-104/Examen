@@ -2,6 +2,7 @@ package com.example.examen.controller;
 
 import com.example.examen.authorities.UserRole;
 import com.example.examen.dto.UserDTO;
+import com.example.examen.principal.MyPrincipal;
 import com.example.examen.service.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import static com.example.examen.principal.MyPrincipal.getLoggedInUser;
 
 @Controller
 public class UserController {
@@ -32,7 +35,9 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public String userPage () {
+    public String userPage (Model model) {
+
+        model.addAttribute("user", userService.findUserByUsername(getLoggedInUser()).get());
         return "user-page";
     }
 
