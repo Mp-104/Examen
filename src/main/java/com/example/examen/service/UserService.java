@@ -1,5 +1,6 @@
 package com.example.examen.service;
 
+import com.example.examen.authorities.UserRole;
 import com.example.examen.dto.UserDTO;
 import com.example.examen.model.CustomUser;
 import com.example.examen.repository.UserRepository;
@@ -32,8 +33,10 @@ public class UserService implements IUserService {
         try {
             if (userRepository.findByUsername(user.username()).isEmpty()) {
 
-                CustomUser newUser = new CustomUser(user.username(), passwordEncoder.encode(user.password()), user.userRole());
+                CustomUser newUser = new CustomUser(user.username(), passwordEncoder.encode(user.password()), UserRole.USER);
 
+                newUser.setFirstName(user.firstName());
+                newUser.setLastName(user.lastName());
                 newUser.setAccountNonLocked(true);
                 newUser.setEnabled(true);
                 newUser.setAccountNonExpired(true);

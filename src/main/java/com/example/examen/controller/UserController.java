@@ -57,12 +57,9 @@ public class UserController {
         System.out.println("Registrerar användare...");
         System.out.println("Förnamn: " + newUser.firstName());
         System.out.println("Efternamn: " + newUser.lastName());
-        System.out.println("Lösenord: " + newUser.password());
-
-
         System.out.println("Användare registrerad!");
 
-        model.addAttribute("status", "Användare registrerad");
+        model.addAttribute("status", userService.saveUser(newUser));
         model.addAttribute("newUser", new UserDTO("", "", "", "", UserRole.USER));
         return "register-page";
     }
