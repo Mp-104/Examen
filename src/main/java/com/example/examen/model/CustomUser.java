@@ -41,35 +41,35 @@ public class CustomUser {
     public CustomUser () {}
 
 
-    public boolean isAccountNonExpired() {
+    public boolean getIsAccountNonExpired() {
         return isAccountNonExpired;
     }
 
-    public void setAccountNonExpired(boolean accountNonExpired) {
+    public void setIsAccountNonExpired(boolean accountNonExpired) {
         isAccountNonExpired = accountNonExpired;
     }
 
-    public boolean isAccountNonLocked() {
+    public boolean getIsAccountNonLocked() {
         return isAccountNonLocked;
     }
 
-    public void setAccountNonLocked(boolean accountNonLocked) {
+    public void setIsAccountNonLocked(boolean accountNonLocked) {
         isAccountNonLocked = accountNonLocked;
     }
 
-    public boolean isCredentialNonExpired() {
+    public boolean getIsCredentialNonExpired() {
         return isCredentialNonExpired;
     }
 
-    public void setCredentialNonExpired(boolean credentialNonExpired) {
+    public void setIsCredentialNonExpired(boolean credentialNonExpired) {
         isCredentialNonExpired = credentialNonExpired;
     }
 
-    public boolean isEnabled() {
+    public boolean getIsEnabled() {
         return isEnabled;
     }
 
-    public void setEnabled(boolean enabled) {
+    public void setIsEnabled(boolean enabled) {
         isEnabled = enabled;
     }
 

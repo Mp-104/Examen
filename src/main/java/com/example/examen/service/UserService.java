@@ -5,12 +5,11 @@ import com.example.examen.dao.IUserDAO;
 import com.example.examen.dto.PasswordDT0;
 import com.example.examen.dto.UserDTO;
 import com.example.examen.model.CustomUser;
-import com.example.examen.principal.MyPrincipal;
-import com.example.examen.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.example.examen.principal.MyPrincipal.getLoggedInUser;
@@ -33,6 +32,11 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public Optional<CustomUser> findUserById(Long id) {
+        return userDAO.findUserById(id);
+    }
+
+    @Override
     public String saveUser(UserDTO user) {
 
         try {
@@ -42,10 +46,10 @@ public class UserService implements IUserService {
 
                 newUser.setFirstName(user.firstName());
                 newUser.setLastName(user.lastName());
-                newUser.setAccountNonLocked(true);
-                newUser.setEnabled(true);
-                newUser.setAccountNonExpired(true);
-                newUser.setCredentialNonExpired(true);
+                newUser.setIsAccountNonLocked(true);
+                newUser.setIsEnabled(true);
+                newUser.setIsAccountNonExpired(true);
+                newUser.setIsCredentialNonExpired(true);
 
                 userDAO.save(newUser);
 
@@ -83,7 +87,42 @@ public class UserService implements IUserService {
 
         CustomUser user = findUserByUsername(getLoggedInUser()).get();
 
-        user.setEnabled(false);
+        user.setIsEnabled(false);
+
+    }
+
+    @Override
+    public List<CustomUser> getAllUsers() {
+        return userDAO.getAllUsers();
+    }
+
+    @Override
+    public CustomUser editUser(CustomUser customUser) {
+
+        Optional<CustomUser> optionalCustomUser = userDAO.findUserById(customUser.getId());
+
+        if (optionalCustomUser.isPresent()) {
+
+            CustomUser user = userDAO.findUserById(customUser.getId()).get();
+
+            user.setFirstName(customUser.getFirstName());
+            user.setLastName(customUser.getLastName());
+            user.setUsername(customUser.getUsername());
+            user.setPassword(passwordEncoder.encode(customUser.getPassword()));
+
+            user.setUserRole(customUser.getUserRole());
+
+            user.setIsAccountNonExpired(customUser.getIsAccountNonExpired());
+            user.setIsAccountNonLocked(customUser.getIsAccountNonLocked());
+            user.setIsCredentialNonExpired(customUser.getIsCredentialNonExpired());
+            user.setIsEnabled(customUser.getIsEnabled());
+
+            userDAO.save(user);
+
+            return user;
+        }
+
+        return optionalCustomUser.get();
 
     }
 }

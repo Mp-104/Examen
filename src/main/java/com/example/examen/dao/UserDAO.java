@@ -5,6 +5,7 @@ import com.example.examen.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -23,10 +24,19 @@ public class UserDAO implements IUserDAO{
     }
 
     @Override
+    public List<CustomUser> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
     public void save (CustomUser customUser) {
         userRepository.save(customUser);
     }
 
+    @Override
+    public Optional<CustomUser> findUserById(Long id) {
+        return userRepository.findById(id);
+    }
 
 
 }

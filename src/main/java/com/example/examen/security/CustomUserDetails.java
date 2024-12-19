@@ -38,10 +38,10 @@ public class CustomUserDetails implements UserDetails {
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.authorities = user.getAuthorities();
-        this.isAccountNonExpired = user.isAccountNonExpired();
-        this.isAccountNonLocked = user.isAccountNonLocked();
-        this.isCredentialNonExpired = user.isCredentialNonExpired();
-        this.isEnabled = user.isEnabled();
+        this.isAccountNonExpired = user.getIsAccountNonExpired();
+        this.isAccountNonLocked = user.getIsAccountNonLocked();
+        this.isCredentialNonExpired = user.getIsCredentialNonExpired();
+        this.isEnabled = user.getIsEnabled();
     }
 
     @Override

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Hantera användare</title>
+</head>
+<body>
+    <h2>Admin User Page</h2>
+
+    <div th:if="${user != null}">
+        <span>Email: </span><h3 th:text="${user.username}"></h3>
+        <br/>
+
+        <span>Is Enabled? </span><span th:text="${user.isEnabled}"></span>
+        <br/>
+        <br/>
+
+        <form th:action="@{/admin/users/edit}" th:object="${user}" method="post">
+            <input type="hidden" th:field="*{id}">
+
+            <label>Email:
+                <input type="text" th:field="*{username}">
+            </label>
+            <br/>
+            <br/>
+
+            <label>Lösenord:
+                <input type="text" th:field="*{password}" >
+            </label>
+            <br/>
+            <br/>
+
+            <label>Förnamn:
+                <input type="text" th:field="*{firstName}" >
+            </label>
+            <br/>
+            <br/>
+
+            <label>Efternamn:
+                <input type="text" th:field="*{lastName}" >
+            </label>
+            <br/>
+            <br/>
+
+            <label>Roll:
+                <select th:field="*{userRole}">
+                    <option th:each="index : ${roles}" th:value="${index}" th:text="${index}"></option>
+                </select>
+            </label>
+            <br/>
+            <br/>
+
+            <label>Is account non expired:
+                <input type="checkbox"  th:field="*{isAccountNonExpired}">
+            </label>
+            <br/>
+            <br/>
+
+            <label>Is account non locked:
+                <input type="checkbox"  th:field="*{isAccountNonLocked}">
+            </label>
+            <br/>
+            <br/>
+
+            <label>Is credential non expired:
+                <input type="checkbox"  th:field="*{isCredentialNonExpired}">
+            </label>
+            <br/>
+            <br/>
+
+
+            <label>Is enabled(th:field):
+                <input type="checkbox"  th:field="*{isEnabled}">
+            </label>
+            <br/>
+            <br/>
+
+            <button type="submit">Ändra</button>
+
+        </form>
+
+        <br/>
+
+        <p>Tillagda personnel:</p>
+        <br/>
+        <ul>
+            <li th:each="personnel : ${user.personnelList}">
+                <span>ID: </span><span th:text="${personnel.id}"></span>
+                <span>Rank: </span><span th:text="${personnel.rank}"></span>
+                <span>Efternamn: </span><span th:text="${personnel.lastName}"></span>
+
+            </li>
+        </ul>
+
+
+
+    </div>
+
+    <div th:if="${user == null}">
+        <h3>ingen användare</h3>
+    </div>
+
+</body>
+</html>

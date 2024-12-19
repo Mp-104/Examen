@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Användarlista</title>
+</head>
+<body>
+    <h2>Userlist-page</h2>
+
+    <div>
+        <ul>
+            <li th:each="user : ${users}">
+                <span>ID: </span><span th:text="${user.id}"></span>
+                <br/>
+                <a th:href="@{/admin/users/{id} (id=${user.id})}"><span>Namn: </span><span th:text="${user.firstName}"></span><span> </span><span th:text="${user.lastName}"></span></a>
+                <br/>
+                <span>Email: </span><span th:text="${user.username}"></span>
+                <br/>
+
+                <span>Tillagda personnel:</span>
+                <ul>
+                    <li th:each="personnel : ${user.personnelList}">
+                        <span>Namn: </span><span th:text="${personnel.firstName}"></span><span> </span><span th:text="${personnel.lastName}"></span>
+                    </li>
+                </ul>
+                <br/>
+                <br/>
+                <br/>
+
+            </li>
+        </ul>
+    </div>
+
+</body>
+</html>

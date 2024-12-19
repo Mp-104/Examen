@@ -223,21 +223,7 @@ public class PersonnelController {
 
     }
 
-    @GetMapping("/delete")
-    public String deletePage (Model model) {
 
-        model.addAttribute("personnel", new PersonnelDTO(0L));
-        return "delete-page";
-    }
-
-    @PostMapping("/delete")
-    public String deletePersonnel (@ModelAttribute("personnel") PersonnelDTO personnel, Model model) {
-        System.out.println("deletePersonnel, personnel.getId(): " + personnel.id());
-
-
-        model.addAttribute("deleted", personnelService.deletePersonnelById(personnel.id()) );
-        return "delete-page";
-    }
 
 //    @ExceptionHandler(MaxUploadSizeExceededException.class)
 //    public String handleFileSizeException (MaxUploadSizeExceededException exception, Model model) {

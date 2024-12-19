@@ -11,9 +11,15 @@ public interface IUserService {
 
     Optional<CustomUser> findUserByUsername(String username);
 
+    Optional<CustomUser> findUserById(Long id);
+
     String saveUser(UserDTO user);
 
     String changePassword(PasswordDT0 password);
 
     void disableUser();
+
+    List<CustomUser> getAllUsers();
+
+    CustomUser editUser(CustomUser customUser);
 }

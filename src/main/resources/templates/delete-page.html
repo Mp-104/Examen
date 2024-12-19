@@ -7,6 +7,8 @@
 <body>
 
     <h2>Radera Personnel med ID:</h2>
+    <br/>
+    <a href="/admin">Tillbaka</a>
 
     <form sec:authorize="hasRole('ADMIN')" th:action="@{/delete}" th:object="${personnel}" method="post">
         <input type="number" th:field="${personnel.id}">
