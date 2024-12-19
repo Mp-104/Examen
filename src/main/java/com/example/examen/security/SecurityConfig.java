@@ -25,6 +25,7 @@ public class SecurityConfig {
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/register").permitAll()
                         .requestMatchers("/personnel", "/personnel-info").hasAuthority("POST")
+                        .requestMatchers("/delete").hasAuthority("DELETE")
                         .requestMatchers("/allpersonnel").permitAll()
                         .anyRequest().authenticated())
 

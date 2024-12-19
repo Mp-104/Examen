@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete</title>
+</head>
+<body>
+
+    <h2>Radera Personnel med ID:</h2>
+
+    <form sec:authorize="hasRole('ADMIN')" th:action="@{/delete}" th:object="${personnel}" method="post">
+        <input type="number" th:field="${personnel.id}">
+
+        <button type="submit">Radera personnel</button>
+    </form>
+    <br/>
+    <br/>
+    <p th:text="${deleted}"></p>
+
+
+</body>
+</html>

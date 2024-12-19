@@ -10,5 +10,7 @@ public interface IPersonnelService {
 
     Optional<Personnel> findPersonnelById(Long id);
 
+    String deletePersonnelById(Long id);
+
     void savePersonnel(Personnel personnel);
 }

@@ -36,6 +36,30 @@ public class PersonnelService implements IPersonnelService {
     }
 
     @Override
+    public String deletePersonnelById(Long id) {
+
+        System.out.println("PersonnelService, deletePersonnelById deleting: " + id);
+
+
+        if (personnelRepository.findById(id).isPresent()) {
+
+
+            System.out.println("Removing Personnel with id: " + id);
+            Personnel personnel = personnelRepository.findById(id).get();
+
+            CustomUser customUser = personnel.getCustomUser();
+            customUser.getPersonnelList().remove(personnel);
+            personnelRepository.deleteById(id);
+
+
+            return "Personnel med id: " + id + " borttagen";
+        } else {
+
+            return "Personnel med id: " + id + " kunde inte hittas";
+        }
+    }
+
+    @Override
     public void savePersonnel(Personnel personnel) {
 
         List<String> imageList = new ArrayList<>();

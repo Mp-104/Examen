@@ -23,6 +23,14 @@
                 <button type="submit">Redigera</button>
             </form>
 
+            <!--
+            <form sec:authorize="hasRole('ADMIN')" th:action="@{/delete}" th:object="${personnel}" method="post">
+                <input type="hidden" th:name="id" th:value="${personnel.id}">
+
+                <button type="submit">Radera personnel</button>
+            </form>
+            -->
+
         </li>
     </ul>
 

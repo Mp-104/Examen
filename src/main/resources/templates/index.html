@@ -39,8 +39,12 @@
     <br/>
     <br/>
 
-    <div sec:authorize="hasRole('USER')">
+    <div sec:authorize="hasAuthority('GET')">
         <a href="/user"><button>Gå till användarsidan</button></a>
+    </div>
+
+    <div sec:authorize="hasAuthority('DELETE')">
+        <a href="/delete">Radera Personnel</a>
     </div>
 
 

@@ -1,6 +1,7 @@
 package com.example.examen.controller;
 
 import com.example.examen.countries.NatoCountries;
+import com.example.examen.dto.PersonnelDTO;
 import com.example.examen.model.CustomUser;
 import com.example.examen.model.Personnel;
 import com.example.examen.service.IPersonnelService;
@@ -107,6 +108,7 @@ public class PersonnelController {
 
         personnelService.savePersonnel(personnel);
 
+        usersPersonnelList = userService.findUserByUsername(getLoggedInUser()).get().getPersonnelList();
 
         model.addAttribute("added", "Tillagt: " + personnel.getFirstName());
         model.addAttribute("personnel", new Personnel());
@@ -141,10 +143,11 @@ public class PersonnelController {
 //        System.out.println("getImages.get1: " + personnel.getImages().get(1));
         System.out.println("/POST----- PersonnelController -- personnelInfoPage ---- ");
 
+        foundPersonnel.getCustomUser().getUsername();
         //String image = personnel.getImages().get(0);
 
 
-        model.addAttribute("personnel", personnel);
+        //model.addAttribute("personnel", personnel);
         model.addAttribute("personnel", foundPersonnel);
         model.addAttribute("countries", getAllNatoCountries());
         return "personnel-info-page";
@@ -218,6 +221,22 @@ public class PersonnelController {
 
         return "personnel-info-page";
 
+    }
+
+    @GetMapping("/delete")
+    public String deletePage (Model model) {
+
+        model.addAttribute("personnel", new PersonnelDTO(0L));
+        return "delete-page";
+    }
+
+    @PostMapping("/delete")
+    public String deletePersonnel (@ModelAttribute("personnel") PersonnelDTO personnel, Model model) {
+        System.out.println("deletePersonnel, personnel.getId(): " + personnel.id());
+
+
+        model.addAttribute("deleted", personnelService.deletePersonnelById(personnel.id()) );
+        return "delete-page";
     }
 
 //    @ExceptionHandler(MaxUploadSizeExceededException.class)

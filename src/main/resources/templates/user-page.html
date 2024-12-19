@@ -17,7 +17,7 @@
     </div>
     <br/>
 
-    <div>
+    <div sec:authorize="hasRole('USER')">
         <form th:action="@{/user}" method="post">
 
             <button type="submit">Lås konto</button>
