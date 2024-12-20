@@ -4,8 +4,13 @@ import com.example.examen.model.CustomUser;
 import com.example.examen.model.Personnel;
 import com.example.examen.repository.PersonnelRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
 
+//import java.awt.print.Pageable;
 import java.util.*;
 
 import static com.example.examen.placeholder.Placeholder.placeholderImage;
@@ -27,6 +32,14 @@ public class PersonnelService implements IPersonnelService {
     @Override
     public List<Personnel> findAll() {
         return personnelRepository.findAll();
+    }
+
+    @Override
+    public Page<Personnel> findPersonnelByCountryAllegianceUSA (int pageNumber, int pageSize, String sortBy) {
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
+
+        return personnelRepository.findPersonnelByCountryAllegiance("USA", pageable);
     }
 
     @Override

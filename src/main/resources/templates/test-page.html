@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Test page</title>
+</head>
+<body>
+<h1>Test page</h1>
+
+<ul>
+    <li th:each="personnel : ${content}">
+        <p th:text="${personnel.firstName}"></p>
+        <p th:text="${personnel.countryAllegiance}"></p>
+    </li>
+</ul>
+
+<!-- Pagination Controls -->
+<div>
+    <p>Page ${currentPage + 1} of ${totalPages}</p>
+
+    <div>
+        <!-- Previous Page Button -->
+        <a th:if="${currentPage > 0}" th:href="@{/test(page=${currentPage - 1})}">Previous</a>
+
+        <!-- Next Page Button -->
+        <a th:if="${currentPage < totalPages - 1}" th:href="@{/test(page=${currentPage + 1})}">Next</a>
+    </div>
+
+    <div>
+        <!-- Page Number Buttons -->
+        <span th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}">
+                <a th:href="@{/test(page=${pageNum})}" th:text="${pageNum + 1}"></a>
+                <span th:if="${pageNum < totalPages - 1}"> | </span>
+            </span>
+    </div>
+</div>
+
+</body>
+</html>
