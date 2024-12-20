@@ -38,5 +38,10 @@ public class UserDAO implements IUserDAO{
         return userRepository.findById(id);
     }
 
+    @Override
+    public void deleteById (Long id) {
+        userRepository.deleteById(id);
+    }
+
 
 }

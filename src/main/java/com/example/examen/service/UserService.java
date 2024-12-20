@@ -5,6 +5,7 @@ import com.example.examen.dao.IUserDAO;
 import com.example.examen.dto.PasswordDT0;
 import com.example.examen.dto.UserDTO;
 import com.example.examen.model.CustomUser;
+import com.example.examen.model.Personnel;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -124,5 +125,41 @@ public class UserService implements IUserService {
 
         return optionalCustomUser.get();
 
+    }
+
+    @Override
+    public String deleteUserById(Long id) {
+
+        if (id == 1) {
+            return "Kan inte ta bort denna användare";
+        }
+
+        if (userDAO.findUserById(id).isPresent()) {
+
+            CustomUser userToDelete = userDAO.findUserById(id).get();
+
+            CustomUser admin = userDAO.findUserById(1L).get();
+
+            for (Personnel personnel : userToDelete.getPersonnelList()) {
+
+                personnel.setCustomUser(admin);
+
+            }
+
+            List<Personnel> updatedPersonnelList = admin.getPersonnelList();
+
+            updatedPersonnelList.addAll(userToDelete.getPersonnelList());
+
+            userToDelete.setPersonnelList(null);
+
+            admin.setPersonnelList(updatedPersonnelList);
+
+            userDAO.deleteById(id);
+
+            return "Användare med id: " + id + " borttagen!";
+        }
+
+
+        return "Användare med id: " + id + " inte borttagen.";
     }
 }

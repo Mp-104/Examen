@@ -3,25 +3,29 @@ package com.example.examen.controller;
 import com.example.examen.authorities.UserRole;
 import com.example.examen.dto.PersonnelDTO;
 import com.example.examen.model.CustomUser;
+import com.example.examen.model.Personnel;
+import com.example.examen.principal.MyPrincipal;
 import com.example.examen.service.IPersonnelService;
 import com.example.examen.service.IUserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 public class AdminController {
 
     private final IPersonnelService personnelService;
     private final IUserService userService;
+    private final PasswordEncoder passwordEncoder;
 
 
-    public AdminController (IPersonnelService personnelService, IUserService userService) {
+    public AdminController (IPersonnelService personnelService, IUserService userService, PasswordEncoder passwordEncoder) {
         this.personnelService = personnelService;
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -75,4 +79,22 @@ public class AdminController {
         return "admin-user-page";
     }
 
+    @PostMapping("/admin/users/delete")
+    public String deleteUser (@ModelAttribute("user") CustomUser customUser, @RequestParam("password") String password, Model model) {
+
+        if (passwordEncoder.matches(password, userService.findUserById(1L).get().getPassword())) {
+
+            model.addAttribute("status", userService.deleteUserById(customUser.getId()));
+            model.addAttribute("users", userService.getAllUsers());
+            return "userlist-page";
+
+        } else {
+
+            model.addAttribute("status", "Fel lösenord");
+            model.addAttribute("user", userService.findUserById(customUser.getId()).get());
+            model.addAttribute("roles", UserRole.values());
+            return "admin-user-page";
+        }
+
+    }
 }

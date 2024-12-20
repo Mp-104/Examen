@@ -22,4 +22,6 @@ public interface IUserService {
     List<CustomUser> getAllUsers();
 
     CustomUser editUser(CustomUser customUser);
+
+    String deleteUserById(Long id);
 }

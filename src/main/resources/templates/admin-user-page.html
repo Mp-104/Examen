@@ -81,6 +81,17 @@
 
         <br/>
 
+        <form th:action="@{/admin/users/delete}" th:object="${user}" method="post">
+            <input type="hidden" th:field="*{id}">
+
+            <label for="password">Lösenord: </label><input type="password" id="password" name="password" required>
+
+            <button type="submit">Radera användare</button>
+        </form>
+        <p th:if="${status}" th:text="${status}"></p>
+
+        <br/>
+
         <p>Tillagda personnel:</p>
         <br/>
         <ul>

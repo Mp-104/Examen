@@ -14,4 +14,6 @@ public interface IUserDAO {
     void save(CustomUser customUser);
 
     Optional<CustomUser> findUserById(Long id);
+
+    void deleteById(Long id);
 }
