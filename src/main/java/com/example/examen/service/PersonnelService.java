@@ -4,6 +4,7 @@ import com.example.examen.model.CustomUser;
 import com.example.examen.model.Personnel;
 import com.example.examen.repository.PersonnelRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -35,6 +36,7 @@ public class PersonnelService implements IPersonnelService {
     }
 
     @Override
+    @Cacheable(cacheNames = "personnelCache") // Todo - this seems to have improved performance significantly
     public Page<Personnel> findAllPersonnel (Pageable pageable) {
         return personnelRepository.findAll(pageable);
     }
