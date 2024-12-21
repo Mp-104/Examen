@@ -4,6 +4,8 @@ import com.example.examen.model.CustomUser;
 import com.example.examen.model.Personnel;
 import com.example.examen.repository.PersonnelRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -57,6 +59,7 @@ public class PersonnelService implements IPersonnelService {
     }
 
     @Override
+    @CacheEvict(cacheNames = {"personnelCache, personnelCache2"}, allEntries = true)
     public String deletePersonnelById(Long id) {
 
         System.out.println("PersonnelService, deletePersonnelById deleting: " + id);
@@ -81,6 +84,8 @@ public class PersonnelService implements IPersonnelService {
     }
 
     @Override
+    //@CachePut(cacheNames = "personnelCache2", key = "'personnel_' + #personnel.id")
+    @CacheEvict(cacheNames = {"personnelCache, personnelCache2"}, allEntries = true)
     public void savePersonnel(Personnel personnel) {
 
         List<String> imageList = new ArrayList<>();
