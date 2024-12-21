@@ -2,10 +2,21 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Test page</title>
+    <title>Test Page</title>
 </head>
 <body>
-<h1>Test page</h1>
+<h1>Test Page</h1>
+
+<!-- Country Selection Dropdown -->
+<form th:action="@{/test}" method="get">
+    <label for="country">Select Country:</label>
+    <select name="country" id="country">
+        <option value="USA" th:selected="${selectedCountry == 'USA'}">USA</option>
+        <option value="Canada" th:selected="${selectedCountry == 'Canada'}">Canada</option>
+        <option value="UK" th:selected="${selectedCountry == 'UK'}">UK</option>
+    </select>
+    <button type="submit">Filter</button>
+</form>
 
 <ul>
     <li th:each="personnel : ${content}">
@@ -20,18 +31,21 @@
 
     <div>
         <!-- Previous Page Button -->
-        <a th:if="${currentPage > 0}" th:href="@{/test(page=${currentPage - 1})}">Previous</a>
+        <a th:if="${currentPage > 0}"
+           th:href="@{/test(page=${currentPage - 1}, country=${selectedCountry})}">Previous</a>
 
         <!-- Next Page Button -->
-        <a th:if="${currentPage < totalPages - 1}" th:href="@{/test(page=${currentPage + 1})}">Next</a>
+        <a th:if="${currentPage < totalPages - 1}"
+           th:href="@{/test(page=${currentPage + 1}, country=${selectedCountry})}">Next</a>
     </div>
 
     <div>
         <!-- Page Number Buttons -->
         <span th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}">
-                <a th:href="@{/test(page=${pageNum})}" th:text="${pageNum + 1}"></a>
-                <span th:if="${pageNum < totalPages - 1}"> | </span>
-            </span>
+            <a th:href="@{/test(page=${pageNum}, country=${selectedCountry})}"
+               th:text="${pageNum + 1}"></a>
+            <span th:if="${pageNum < totalPages - 1}"> | </span>
+        </span>
     </div>
 </div>
 

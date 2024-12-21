@@ -12,7 +12,7 @@ public interface IPersonnelService {
 
     Page<Personnel> findAllPersonnel (Pageable pageable);
 
-    Page<Personnel> findPersonnelByCountryAllegianceUSA(int pageNumber, int pageSize, String sortBy);
+    Page<Personnel> findPersonnelByCountryAllegiance(String country, int pageNumber, int pageSize, String sortBy);
 
     Optional<Personnel> findPersonnelById(Long id);
 

@@ -21,9 +21,11 @@ public class TestController {
     }
 
     @GetMapping("/test")
-    public String testPageable (@RequestParam("page") int page, Model model) {
+    public String testPageable (@RequestParam(value = "page" , required = false, defaultValue = "0") int page,
+                                @RequestParam(value = "country", required = false, defaultValue = "USA") String country,
+                                Model model) {
 
-        Page<Personnel> personnelPage = personnelService.findPersonnelByCountryAllegianceUSA(page,3, "firstName");
+        Page<Personnel> personnelPage = personnelService.findPersonnelByCountryAllegiance(country, page,3, "firstName");
 
         personnelPage.getContent();
         personnelPage.getTotalPages();
@@ -39,6 +41,8 @@ public class TestController {
         model.addAttribute("currentPage", personnelPage.getNumber());
         model.addAttribute("totalPages", personnelPage.getTotalPages());
         model.addAttribute("totalElements", personnelPage.getTotalElements());
+
+        model.addAttribute("selectedCountry", country);
         return "test-page";
 
     }

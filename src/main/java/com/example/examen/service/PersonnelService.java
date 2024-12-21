@@ -42,11 +42,12 @@ public class PersonnelService implements IPersonnelService {
     }
 
     @Override
-    public Page<Personnel> findPersonnelByCountryAllegianceUSA (int pageNumber, int pageSize, String sortBy) {
+    @Cacheable(cacheNames = "personnelCache2")
+    public Page<Personnel> findPersonnelByCountryAllegiance (String country, int pageNumber, int pageSize, String sortBy) {
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
 
-        return personnelRepository.findPersonnelByCountryAllegiance("USA", pageable);
+        return personnelRepository.findPersonnelByCountryAllegiance(country, pageable);
     }
 
     @Override
