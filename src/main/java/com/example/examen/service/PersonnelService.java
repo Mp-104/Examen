@@ -35,6 +35,11 @@ public class PersonnelService implements IPersonnelService {
     }
 
     @Override
+    public Page<Personnel> findAllPersonnel (Pageable pageable) {
+        return personnelRepository.findAll(pageable);
+    }
+
+    @Override
     public Page<Personnel> findPersonnelByCountryAllegianceUSA (int pageNumber, int pageSize, String sortBy) {
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));

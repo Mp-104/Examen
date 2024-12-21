@@ -15,6 +15,10 @@ import java.util.Optional;
 public interface PersonnelRepository extends JpaRepository<Personnel, Long> {
 
     Optional<Personnel> findPersonnelById (Long id);
+    //Page<Personnel> findAllPersonnel (Pageable pageable);
+
+    @Override
+    Page<Personnel> findAll (Pageable pageable);
 
     Page<Personnel> findPersonnelByCountryAllegiance (String country, Pageable page);
 }

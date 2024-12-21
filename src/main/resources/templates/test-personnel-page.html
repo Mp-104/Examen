@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Paginated Personnel</title>
+</head>
+<body>
+<h1>Personnel List</h1>
+<table>
+    <thead>
+    <tr>
+        <th>First Name</th>
+        <th>Last name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="personnel : ${personnelPage.content}">
+        <td th:text="${personnel.firstName}">Name</td>
+        <td th:text="${personnel.lastName}">Email</td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- Pagination Controls -->
+<div>
+    <span th:text="'Page ' + ${personnelPage.number + 1} + ' of ' + ${personnelPage.totalPages}"></span>
+
+    <div>
+        <a th:if="${personnelPage.hasPrevious()}"
+           th:href="@{'/testpersonnel?page=' + ${personnelPage.number - 1} + '&size=' + ${personnelPage.size}}">
+            Previous
+        </a>
+
+        <a th:if="${personnelPage.hasNext()}"
+           th:href="@{'/testpersonnel?page=' + ${personnelPage.number + 1} + '&size=' + ${personnelPage.size}}">
+            Next
+        </a>
+    </div>
+</div>
+</body>
+</html>

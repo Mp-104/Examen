@@ -3,6 +3,9 @@ package com.example.examen.controller;
 import com.example.examen.model.Personnel;
 import com.example.examen.service.IPersonnelService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +40,21 @@ public class TestController {
         model.addAttribute("totalPages", personnelPage.getTotalPages());
         model.addAttribute("totalElements", personnelPage.getTotalElements());
         return "test-page";
+
+    }
+
+    @GetMapping("/testpersonnel")
+    public String listPersonnel (@RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "5") int size,
+                                 Model model) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+
+        Page<Personnel> personnelPage = personnelService.findAllPersonnel(pageable);
+
+        model.addAttribute("personnelPage", personnelPage);
+
+        return "test-personnel-page";
 
     }
 }
