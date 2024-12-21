@@ -59,7 +59,7 @@ public class PersonnelService implements IPersonnelService {
     }
 
     @Override
-    @CacheEvict(cacheNames = {"personnelCache, personnelCache2"}, allEntries = true)
+    @CacheEvict(cacheNames = {"personnelCache", "personnelCache2"}, allEntries = true)
     public String deletePersonnelById(Long id) {
 
         System.out.println("PersonnelService, deletePersonnelById deleting: " + id);
@@ -85,7 +85,7 @@ public class PersonnelService implements IPersonnelService {
 
     @Override
     //@CachePut(cacheNames = "personnelCache2", key = "'personnel_' + #personnel.id")
-    @CacheEvict(cacheNames = {"personnelCache, personnelCache2"}, allEntries = true)
+    @CacheEvict(cacheNames = {"personnelCache", "personnelCache2"}, allEntries = true)
     public void savePersonnel(Personnel personnel) {
 
         List<String> imageList = new ArrayList<>();
