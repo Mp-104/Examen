@@ -8,7 +8,7 @@
 <h1>Test Page</h1>
 
 <!-- Country Selection Dropdown -->
-<form th:action="@{/test}" method="get">
+<form th:action="@{/getPersonnel}" method="get">
     <label for="country">Välj land:</label>
     <select name="country" id="country">
         <option value="ALL" th:selected="${selectedCountry == 'ALL'}">ALL</option>
@@ -47,17 +47,17 @@
     <div>
         <!-- Previous Page Button -->
         <a th:if="${currentPage > 0}"
-           th:href="@{/test(page=${currentPage - 1}, country=${selectedCountry}, pageSize=${pageSize})}">Föregående</a>
+           th:href="@{/getPersonnel(page=${currentPage - 1}, country=${selectedCountry}, pageSize=${pageSize})}">Föregående</a>
 
         <!-- Next Page Button -->
         <a th:if="${currentPage < totalPages - 1}"
-           th:href="@{/test(page=${currentPage + 1}, country=${selectedCountry}, pageSize=${pageSize})}">Nästa</a>
+           th:href="@{/getPersonnel(page=${currentPage + 1}, country=${selectedCountry}, pageSize=${pageSize})}">Nästa</a>
     </div>
 
     <div th:if="${totalPages > 1}">
         <!-- Page Number Buttons -->
         <span th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}">
-            <a th:href="@{/test(page=${pageNum}, country=${selectedCountry}, pageSize=${pageSize})}"
+            <a th:href="@{/getPersonnel(page=${pageNum}, country=${selectedCountry}, pageSize=${pageSize})}"
                th:text="${pageNum + 1}"></a>
             <span th:if="${pageNum < totalPages - 1}"> | </span>
         </span>

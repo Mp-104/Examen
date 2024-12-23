@@ -55,7 +55,7 @@ public class TestController {
 
     }
 
-    @GetMapping("/test")
+    @GetMapping("/getPersonnel")
     public String testPageable1 (@RequestParam(value = "page" , required = false, defaultValue = "0") int page,
                                 @RequestParam(value = "country", required = false, defaultValue = "ALL") String country,
                                 @RequestParam(value = "pageSize", required = false, defaultValue = "3") int pageSize,
