@@ -4,6 +4,7 @@ import com.example.examen.model.CustomUser;
 import com.example.examen.model.Personnel;
 import com.example.examen.repository.PersonnelRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 //import java.awt.print.Pageable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.example.examen.placeholder.Placeholder.placeholderImage;
 import static com.example.examen.principal.MyPrincipal.getLoggedInUser;
@@ -24,15 +24,15 @@ public class PersonnelService implements IPersonnelService {
     private final IUserService userService;
 
     private final PersonnelRepository personnelRepository;
-    //private final CacheManager cacheManager;
+    private final CacheManager cacheManager;
 
 
     public PersonnelService(IUserService userService, PersonnelRepository personnelRepository
-            //, CacheManager cacheManager
+            , CacheManager cacheManager
     ) {
         this.userService = userService;
         this.personnelRepository = personnelRepository;
-        //this.cacheManager = cacheManager;
+        this.cacheManager = cacheManager;
     }
 
     @Override
@@ -40,6 +40,24 @@ public class PersonnelService implements IPersonnelService {
     @Cacheable(cacheNames = "personnel_all1", key = "'all'")
     public List<Personnel> findAll() {
         return personnelRepository.findAll();
+    }
+
+    @Override
+    public Page<Personnel> paginateList(List<Personnel> allPersonnel, Pageable pageable) {
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+
+        List<Personnel> paginatedList;
+
+        if (allPersonnel.size() < startItem) {
+            paginatedList = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, allPersonnel.size());
+            paginatedList = allPersonnel.subList(startItem, toIndex);
+        }
+
+        return new PageImpl<>(paginatedList, pageable, allPersonnel.size());
     }
 
     @Override
@@ -87,7 +105,10 @@ public class PersonnelService implements IPersonnelService {
     }
 
     @Override
-    @CacheEvict(cacheNames = {"personnelCache", "personnelCache2"}, allEntries = true)
+    //@CacheEvict(cacheNames = {"personnelCache", "personnelCache2"}, allEntries = true)
+    //@CacheEvict(cacheNames = {"personnel_by_id"}, key = "#id")
+    @CacheEvict(cacheNames = {"personnel_all"}, allEntries = true)
+    //@CacheEvict(cacheNames = {"personnel_by_country"}, allEntries = true)
     public String deletePersonnelById(Long id) {
 
         System.out.println("PersonnelService, deletePersonnelById deleting: " + id);
@@ -113,7 +134,10 @@ public class PersonnelService implements IPersonnelService {
 
     @Override
     //@CachePut(cacheNames = "personnelCache2", key = "'personnel_' + #personnel.id")
-    @CacheEvict(cacheNames = {"personnelCache", "personnelCache2"}, allEntries = true)
+    //@CacheEvict(cacheNames = {"personnelCache", "personnelCache2"}, allEntries = true)
+    //@CachePut(cacheNames = {"personnel_by_id"}, key = "#personnel.id")
+    //@CachePut(cacheNames = {"personnel_all"}, key = "'all'")
+    //@CachePut(cacheNames = {"personnel_all"}, key = "'page_0_10_id:ASC'")
     public void savePersonnel(Personnel personnel) {
 
         List<String> imageList = new ArrayList<>();
@@ -217,5 +241,20 @@ public class PersonnelService implements IPersonnelService {
 //        System.out.println("personnel.getPictures(): what is saved: " + personnel.getPictures());
 //        System.out.println("personnel.getImages(): what is saved: " + personnel.getImages());
         personnelRepository.save(personnel);
+
+        Cache personnelByIdCache = cacheManager.getCache("personnel_by_id");
+        if (personnelByIdCache != null) {
+            personnelByIdCache.put(personnel.getId(), personnel);
+        }
+
+        Cache personnelAllCache = cacheManager.getCache("personnel_all1");
+        if (personnelAllCache != null) {
+            personnelAllCache.put("all", personnelRepository.findAll());
+        }
+
+        Cache personnelPageCache = cacheManager.getCache("personnel_all");
+        if (personnelPageCache != null) {
+            personnelPageCache.put("page_0_3_id:ASC", personnelRepository.findAll(PageRequest.of(0, 3, Sort.by("firstName").ascending())));
+        }
     }
 }

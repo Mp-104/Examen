@@ -12,12 +12,20 @@
     <label for="country">Välj land:</label>
     <select name="country" id="country">
         <option value="ALL" th:selected="${selectedCountry == 'ALL'}">ALL</option>
-        <option value="USA" th:selected="${selectedCountry == 'USA'}">USA</option>
-        <option value="Canada" th:selected="${selectedCountry == 'Canada'}">Canada</option>
-        <option value="UK" th:selected="${selectedCountry == 'UK'}">UK</option>
+        <option th:each="index : ${countries}" th:value="${index}" th:text="${index}"></option>
     </select>
+
+    <label for="pageSize">Hur många resultat per sida:</label>
+    <select name="pageSize" id="pageSize">
+        <option value="3" th:selected="${pageSize == 3}">3</option>
+        <option value="4" th:selected="${pageSize == 4}">4</option>
+        <option value="5" th:selected="${pageSize == 5}">5</option>
+        <option value="6" th:selected="${pageSize == 6}">6</option>
+    </select>
+
     <button type="submit">Filtrera</button>
 </form>
+
 
 <ul>
     <li th:each="personnel : ${content}">
@@ -39,17 +47,17 @@
     <div>
         <!-- Previous Page Button -->
         <a th:if="${currentPage > 0}"
-           th:href="@{/test(page=${currentPage - 1}, country=${selectedCountry})}">Föregående</a>
+           th:href="@{/test(page=${currentPage - 1}, country=${selectedCountry}, pageSize=${pageSize})}">Föregående</a>
 
         <!-- Next Page Button -->
         <a th:if="${currentPage < totalPages - 1}"
-           th:href="@{/test(page=${currentPage + 1}, country=${selectedCountry})}">Nästa</a>
+           th:href="@{/test(page=${currentPage + 1}, country=${selectedCountry}, pageSize=${pageSize})}">Nästa</a>
     </div>
 
     <div th:if="${totalPages > 1}">
         <!-- Page Number Buttons -->
         <span th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}">
-            <a th:href="@{/test(page=${pageNum}, country=${selectedCountry})}"
+            <a th:href="@{/test(page=${pageNum}, country=${selectedCountry}, pageSize=${pageSize})}"
                th:text="${pageNum + 1}"></a>
             <span th:if="${pageNum < totalPages - 1}"> | </span>
         </span>

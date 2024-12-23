@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface IPersonnelService {
     List<Personnel> findAll();
 
+    Page<Personnel> paginateList(List<Personnel> allPersonnel, Pageable pageable);
+
     Page<Personnel> findAllPersonnel (Pageable pageable);
 
     Page<Personnel> findPersonnelByCountryAllegiance(String country, int pageNumber, int pageSize, String sortBy) throws InstantiationException, IllegalAccessException;

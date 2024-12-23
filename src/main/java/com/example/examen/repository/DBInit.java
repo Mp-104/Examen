@@ -48,16 +48,17 @@ public class DBInit {
 
         List<Personnel> personnelList = personnelService.findAll();
         //Page<Personnel> personnelPage = personnelService.findAllPersonnel(pageable);
-        Page<Personnel> personnelCountryPage = personnelService.findPersonnelByCountryAllegiance("USA", 0, 3, "firstName");
+        //Page<Personnel> personnelCountryPage = personnelService.findPersonnelByCountryAllegiance("USA", 0, 3, "firstName");
 
         cacheManager.getCache("personnel_all1").put("all", personnelList);
         //cacheManager.getCache("personnel_all").put("all", personnelPage);
-        cacheManager.getCache("personnel_by_country").put(key, personnelCountryPage);
+        //cacheManager.getCache("personnel_by_country").put(key, personnelCountryPage);
 
         int pagesToPreload = 5;
         int pageSize = 3;
         Sort sort = Sort.by("firstName");
 
+        /*
         for (int pageNumber = 0; pageNumber < pagesToPreload; pageNumber ++) {
             Pageable pageable1 = PageRequest.of(pageNumber, pageSize, sort);
             Page<Personnel> personnelPage1 = personnelService.findAllPersonnel(pageable1);
@@ -66,6 +67,8 @@ public class DBInit {
 
             cacheManager.getCache("personnel_all").put(key1, personnelPage1);
         }
+
+         */
 
         System.out.println("done fetching all personnel");
     }
@@ -89,16 +92,6 @@ public class DBInit {
      */
 
 
-}
-
-@Configuration
-@EnableCaching
-class CacheConfig {
-
-    @Bean
-    public CacheManager cacheManager () {
-        return new ConcurrentMapCacheManager();
-    }
 }
 
 

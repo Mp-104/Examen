@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -26,6 +27,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class TestPersonnelService {
 
+    @Mock
+    private CacheManager cacheManager;
     @Mock
     private Authentication authentication;
 
@@ -102,6 +105,9 @@ class TestPersonnelService {
         personnel.setPicture("[]".getBytes());
         CustomUser user = new CustomUser();
         user.setUsername("testUser");
+
+        cacheManager = mock(CacheManager.class);
+        
 
         securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
