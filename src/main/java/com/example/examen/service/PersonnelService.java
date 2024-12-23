@@ -43,7 +43,7 @@ public class PersonnelService implements IPersonnelService {
     }
 
     @Override
-    @Cacheable(cacheNames = "personnel_all", key = "'all'") // Todo - this seems to have improved performance significantly
+    @Cacheable(cacheNames = "personnel_all", key = "'page_' + #pageable.pageNumber + '_' + #pageable.pageSize + '_' + #pageable.sort.toString()") // Todo - this seems to have improved performance significantly
     public Page<Personnel> findAllPersonnel (Pageable pageable) {
         return personnelRepository.findAll(pageable);
     }

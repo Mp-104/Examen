@@ -35,20 +35,37 @@ public class DBInit {
     }
 
     @PostConstruct
-    public void preWarm () {
+    public void preWarm () throws InstantiationException, IllegalAccessException {
 
         preloadCache();
     }
 
     @Async
-    public void preloadCache () {
+    public void preloadCache () throws InstantiationException, IllegalAccessException {
         System.out.println("warming up cache fetching all personnel..");
-        Pageable pageable = PageRequest.of(0, 3, Sort.by("firstName"));
+        //Pageable pageable = PageRequest.of(0, 3, Sort.by("firstName"));
+        String key = "USA" + "_" + 0 + "_" + 3;
 
         List<Personnel> personnelList = personnelService.findAll();
-        Page<Personnel> personnelPage = personnelService.findAllPersonnel(pageable);
+        //Page<Personnel> personnelPage = personnelService.findAllPersonnel(pageable);
+        Page<Personnel> personnelCountryPage = personnelService.findPersonnelByCountryAllegiance("USA", 0, 3, "firstName");
+
         cacheManager.getCache("personnel_all1").put("all", personnelList);
-        cacheManager.getCache("personnel_all").put("all", personnelPage);
+        //cacheManager.getCache("personnel_all").put("all", personnelPage);
+        cacheManager.getCache("personnel_by_country").put(key, personnelCountryPage);
+
+        int pagesToPreload = 5;
+        int pageSize = 3;
+        Sort sort = Sort.by("firstName");
+
+        for (int pageNumber = 0; pageNumber < pagesToPreload; pageNumber ++) {
+            Pageable pageable1 = PageRequest.of(pageNumber, pageSize, sort);
+            Page<Personnel> personnelPage1 = personnelService.findAllPersonnel(pageable1);
+
+            String key1 = "page_" + pageNumber + "_" + pageSize + "_" + sort.toString();
+
+            cacheManager.getCache("personnel_all").put(key1, personnelPage1);
+        }
 
         System.out.println("done fetching all personnel");
     }
