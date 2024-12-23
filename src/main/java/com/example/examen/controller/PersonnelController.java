@@ -131,7 +131,7 @@ public class PersonnelController {
 
 
 
-    @PostMapping("/personnel-info")
+    @GetMapping("/personnel-info")
     //@Transactional
     public String personnelInfoPage (@ModelAttribute("personnel") Personnel personnel, Model model) {
 

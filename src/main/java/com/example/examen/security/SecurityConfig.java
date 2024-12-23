@@ -24,11 +24,13 @@ public class SecurityConfig {
                         .requestMatchers("/random").permitAll()
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/register").permitAll()
-                        .requestMatchers("/personnel", "/personnel-info").hasAuthority("POST")
+                        .requestMatchers("/personnel").hasAuthority("POST")
                         .requestMatchers("/delete").hasAuthority("DELETE")
                         .requestMatchers("/admin", "/admin/*").hasRole("ADMIN")
-                        .requestMatchers("/allpersonnel", "/getPersonnel").permitAll()
+                        .requestMatchers("/allpersonnel", "/getPersonnel", "/personnel-info").permitAll()
                         .anyRequest().authenticated())
+            .csrf(csrf -> csrf
+                    .ignoringRequestMatchers("/getPersonnel", "/personnel-info"))
 
             .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer
                         .loginPage("/login").permitAll())

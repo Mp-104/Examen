@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Personnel Info</title>
@@ -7,20 +8,50 @@
 <body>
     <h1>Personnel info edit page</h1>
 
-    <h2 th:text="${personnel.firstName}"><span th:text="${personnel.lastName}"></span></h2>
-    <h2 th:text="${personnel.lastName}"></h2>
-    <h2 th:text="${personnel.branch}"></h2>
-    <h2 th:text="${personnel.countryAllegiance}"></h2>
     <h2 th:text="${personnel.id}"></h2>
-    <h2 th:text="${personnel.rank}"></h2>
-    <h2 th:text="${personnel.homeAddress}"></h2>
+
+    <img th:src="'data:image/jpeg;base64, ' + ${personnel.image}" style="max-width: 200px">
+    <br/>
+
+    <label>Förnamn:
+        <span th:text="${personnel.firstName}"></span>
+    </label>
+    <br/>
+
+    <label>Efternamn:
+        <span th:text="${personnel.lastName}"></span>
+    </label>
+    <br/>
+
+
+    <label>Militärgren:
+        <span th:text="${personnel.branch}"></span>
+    </label>
+    <br/>
+
+
+    <label>Landstillhörighet:
+        <span th:text="${personnel.countryAllegiance}"></span>
+    </label>
+    <br/>
+
+    <label>Rank:
+        <span th:text="${personnel.rank}"></span>
+    </label>
+    <br/>
+
+    <label>Hemaddress:
+        <span th:text="${personnel.homeAddress}"></span>
+    </label>
+    <br/>
+
+
     <span>Lades till av: </span><span th:text="${personnel.customUser.username}"></span>
 
     <br/>
     <br/>
 
 
-    <img th:src="'data:image/jpeg;base64, ' + ${personnel.image}" style="max-width: 200px">
 
     <!--
     <img th:src="'/getimage/'+ ${personnel.id}" style="max-width: 200px">
@@ -36,7 +67,7 @@
     <br/>
 
 
-    <form th:action="@{/edit}" th:object="${personnel}" method="post" enctype="multipart/form-data">
+    <form sec:authorize="hasRole('ADMIN')" th:action="@{/edit}" th:object="${personnel}" method="post" enctype="multipart/form-data">
         <input type="hidden" th:field="*{id}">
 
         <label sec:authorize="hasRole('ADMIN')">Huvudbild
