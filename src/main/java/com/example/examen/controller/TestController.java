@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Objects;
+
 @Controller
 public class TestController {
 
@@ -22,29 +24,39 @@ public class TestController {
 
     @GetMapping("/test")
     public String testPageable (@RequestParam(value = "page" , required = false, defaultValue = "0") int page,
-                                @RequestParam(value = "country", required = false, defaultValue = "USA") String country,
-                                Model model) {
-
-        Page<Personnel> personnelPage = personnelService.findPersonnelByCountryAllegiance(country, page,3, "firstName");
-
-        personnelPage.getContent();
-        personnelPage.getTotalPages();
-        personnelPage.getTotalElements();
-
-        System.out.println("personnelPage.getContent(); " + personnelPage.getContent());
-        System.out.println("personnelPage.getTotalPages(); " + personnelPage.getTotalPages());
-        System.out.println("personnelPage.getTotalElements(); " + personnelPage.getTotalElements());
-
-        model.addAttribute("content", personnelPage.getContent());
+                                @RequestParam(value = "country", required = false, defaultValue = "ALL") String country,
+                                Model model) throws InstantiationException, IllegalAccessException {
 
 
-        model.addAttribute("currentPage", personnelPage.getNumber());
-        model.addAttribute("totalPages", personnelPage.getTotalPages());
-        model.addAttribute("totalElements", personnelPage.getTotalElements());
 
+        if (!Objects.equals(country, "ALL")) {
+            Page<Personnel> personnelPage = personnelService.findPersonnelByCountryAllegiance(country, page,3, "firstName");
+
+            personnelPage.getContent();
+            personnelPage.getTotalPages();
+            personnelPage.getTotalElements();
+
+            System.out.println("personnelPage.getContent(); " + personnelPage.getContent());
+            System.out.println("personnelPage.getTotalPages(); " + personnelPage.getTotalPages());
+            System.out.println("personnelPage.getTotalElements(); " + personnelPage.getTotalElements());
+
+            model.addAttribute("content", personnelPage.getContent());
+            model.addAttribute("currentPage", personnelPage.getNumber());
+            model.addAttribute("totalPages", personnelPage.getTotalPages());
+            model.addAttribute("totalElements", personnelPage.getTotalElements());
+
+            model.addAttribute("selectedCountry", country);
+            return "test-page";
+        }
+        Pageable pageable = PageRequest.of(page, 3, Sort.by("firstName"));
+        Page<Personnel> allPersonnelPage = personnelService.findAllPersonnel(pageable);
+
+        model.addAttribute("content", allPersonnelPage.getContent());
+        model.addAttribute("currentPage", allPersonnelPage.getNumber());
+        model.addAttribute("totalPages", allPersonnelPage.getTotalPages());
         model.addAttribute("selectedCountry", country);
-        return "test-page";
 
+        return "test-page";
     }
 
     @GetMapping("/testpersonnel")

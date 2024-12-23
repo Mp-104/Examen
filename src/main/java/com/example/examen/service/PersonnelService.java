@@ -4,17 +4,15 @@ import com.example.examen.model.CustomUser;
 import com.example.examen.model.Personnel;
 import com.example.examen.repository.PersonnelRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Pageable;
 
 //import java.awt.print.Pageable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.example.examen.placeholder.Placeholder.placeholderImage;
 import static com.example.examen.principal.MyPrincipal.getLoggedInUser;
@@ -26,26 +24,54 @@ public class PersonnelService implements IPersonnelService {
     private final IUserService userService;
 
     private final PersonnelRepository personnelRepository;
+    //private final CacheManager cacheManager;
 
-    public PersonnelService(IUserService userService, PersonnelRepository personnelRepository) {
+
+    public PersonnelService(IUserService userService, PersonnelRepository personnelRepository
+            //, CacheManager cacheManager
+    ) {
         this.userService = userService;
         this.personnelRepository = personnelRepository;
+        //this.cacheManager = cacheManager;
     }
 
     @Override
+
+    @Cacheable(cacheNames = "personnel_all1", key = "'all'")
     public List<Personnel> findAll() {
         return personnelRepository.findAll();
     }
 
     @Override
-    @Cacheable(cacheNames = "personnelCache") // Todo - this seems to have improved performance significantly
+    @Cacheable(cacheNames = "personnel_all", key = "'all'") // Todo - this seems to have improved performance significantly
     public Page<Personnel> findAllPersonnel (Pageable pageable) {
         return personnelRepository.findAll(pageable);
     }
 
     @Override
-    @Cacheable(cacheNames = "personnelCache2")
-    public Page<Personnel> findPersonnelByCountryAllegiance (String country, int pageNumber, int pageSize, String sortBy) {
+    //@Cacheable(cacheNames = "personnelCache2")
+    //@Cacheable(cacheNames = "personnelCache")
+    @Cacheable(cacheNames = "personnel_by_country", key = "#country + '_' + #pageNumber + '_' + #pageSize")
+    public Page<Personnel> findPersonnelByCountryAllegiance (String country, int pageNumber, int pageSize, String sortBy) throws InstantiationException, IllegalAccessException {
+
+
+        /*
+        List<Personnel> allPersonnel = (List<Personnel>) cacheManager.getCache("personnel_all").get("all").get();
+
+        if (allPersonnel != null) {
+            List<Personnel> filteredPersonnelList = allPersonnel.stream()
+                    .filter(personnel -> country.equals(personnel.getCountryAllegiance()))
+                    .collect(Collectors.toList());
+
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
+
+            int start = (int) pageable.getOffset();
+            int end = Math.min((start + pageable.getPageSize()), filteredPersonnelList.size());
+
+            return new PageImpl<>(filteredPersonnelList.subList(start, end), pageable, filteredPersonnelList.size());
+        }
+
+         */
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
 
@@ -54,6 +80,8 @@ public class PersonnelService implements IPersonnelService {
 
     @Override
     //@org.springframework.transaction.annotation.Transactional
+    //@Cacheable(cacheNames = "personnelCache")
+    @Cacheable(cacheNames = "personnel_by_id", key = "#id")
     public Optional<Personnel> findPersonnelById(Long id) {
         return personnelRepository.findById(id);
     }

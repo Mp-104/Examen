@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Test Page</title>
@@ -9,37 +9,44 @@
 
 <!-- Country Selection Dropdown -->
 <form th:action="@{/test}" method="get">
-    <label for="country">Select Country:</label>
+    <label for="country">Välj land:</label>
     <select name="country" id="country">
+        <option value="ALL" th:selected="${selectedCountry == 'ALL'}">ALL</option>
         <option value="USA" th:selected="${selectedCountry == 'USA'}">USA</option>
         <option value="Canada" th:selected="${selectedCountry == 'Canada'}">Canada</option>
         <option value="UK" th:selected="${selectedCountry == 'UK'}">UK</option>
     </select>
-    <button type="submit">Filter</button>
+    <button type="submit">Filtrera</button>
 </form>
 
 <ul>
     <li th:each="personnel : ${content}">
         <p th:text="${personnel.firstName}"></p>
         <p th:text="${personnel.countryAllegiance}"></p>
+        <img th:src="'data:image/jpeg;base64, ' + ${personnel.image}" style="max-width: 250px">
+
+        <form sec:authorize="hasRole('ADMIN')" th:action="@{/personnel-info}" th:object="${personnel}" method="post" >
+            <input type="hidden" th:name="id" th:value="${personnel.id}">
+
+            <button type="submit">Redigera</button>
+        </form>
     </li>
 </ul>
 
 <!-- Pagination Controls -->
 <div>
-    <p>Page ${currentPage + 1} of ${totalPages}</p>
 
     <div>
         <!-- Previous Page Button -->
         <a th:if="${currentPage > 0}"
-           th:href="@{/test(page=${currentPage - 1}, country=${selectedCountry})}">Previous</a>
+           th:href="@{/test(page=${currentPage - 1}, country=${selectedCountry})}">Föregående</a>
 
         <!-- Next Page Button -->
         <a th:if="${currentPage < totalPages - 1}"
-           th:href="@{/test(page=${currentPage + 1}, country=${selectedCountry})}">Next</a>
+           th:href="@{/test(page=${currentPage + 1}, country=${selectedCountry})}">Nästa</a>
     </div>
 
-    <div>
+    <div th:if="${totalPages > 1}">
         <!-- Page Number Buttons -->
         <span th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}">
             <a th:href="@{/test(page=${pageNum}, country=${selectedCountry})}"
