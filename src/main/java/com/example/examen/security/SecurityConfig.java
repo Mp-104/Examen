@@ -27,7 +27,7 @@ public class SecurityConfig {
                         .requestMatchers("/personnel", "/personnel-info").hasAuthority("POST")
                         .requestMatchers("/delete").hasAuthority("DELETE")
                         .requestMatchers("/admin", "/admin/*").hasRole("ADMIN")
-                        .requestMatchers("/allpersonnel").permitAll()
+                        .requestMatchers("/allpersonnel", "/getPersonnel").permitAll()
                         .anyRequest().authenticated())
 
             .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer
