@@ -4,142 +4,277 @@
 <head>
     <meta charset="UTF-8">
     <title>Personnel Info</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        /* Navbar Enhancements */
+        .navbar {
+            font-size: 0.95rem;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff !important; /* Ensure white text */
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #0056b3 !important; /* Brighter blue highlight */
+            color: #ffffff !important;
+        }
+
+        .navbar-nav .btn-outline-light {
+            font-size: 0.9rem;
+            margin-top: 2px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar-nav .btn-outline-light:hover {
+            background-color: #ffffff !important;
+            color: #0056b3 !important;
+            border-color: #ffffff !important;
+        }
+
+                /* General Page Layout */
+        .container-content {
+            margin-top: 100px;
+            margin-bottom: 50px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px 30px;
+        }
+
+        /* Section Headings */
+        .section-heading {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        /* Personnel Info Labels */
+        .info-label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: inline-block;
+            width: 150px;
+        }
+
+        /* Personnel Info Values */
+        .info-value {
+            font-weight: normal;
+            color: #555;
+        }
+
+        /* Images */
+        .personnel-image {
+            max-width: 200px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+
+        /* Form Styling */
+
+
+        form label {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        form input,
+        form select,
+        form textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #ced4da;
+        }
+
+
+
+        form button[type="submit"]:hover {
+            background-color: #004085;
+        }
+
+        /* Image Gallery */
+        .image-gallery img {
+            max-width: 150px;
+            margin: 5px;
+            border-radius: 4px;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .info-label {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+        }
+
+    </style>
+
 </head>
-<body>
-    <h1>Personnel info edit page</h1>
+<body class="bg-light">
 
-    <h2 th:text="${personnel.id}"></h2>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <a class="navbar-brand" href="/">Personnel System</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- Left-Side Links -->
+            <ul class="navbar-nav mr-auto">
 
-    <img th:src="'data:image/jpeg;base64, ' + ${personnel.image}" style="max-width: 200px">
-    <br/>
+                <li class="nav-item">
+                    <a class="nav-link" href="/getPersonnel">All Personnel</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAuthority('POST')">
+                    <a class="nav-link" href="/personnel">Lägg till Uppgifter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/random">Random Fact</a>
+                </li>
+            </ul>
 
-    <label>Förnamn:
-        <span th:text="${personnel.firstName}"></span>
-    </label>
-    <br/>
+            <!-- Right-Side Links -->
+            <ul class="navbar-nav">
+                <li class="nav-item" sec:authorize="hasAuthority('GET')">
+                    <a class="nav-link" href="/user">Användarsidan</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" href="/admin">Admin Sida</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" href="/register">Registrera</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" href="/login">Logga in</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAuthority('GET')">
+                    <form th:action="@{/logout}" method="post" class="form-inline">
+                        <button type="submit" class="btn btn-sm btn-outline-light ml-2">Logga ut</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-    <label>Efternamn:
-        <span th:text="${personnel.lastName}"></span>
-    </label>
-    <br/>
+    <div class="container container-content">
+        <h1 class="section-heading">Personnel Info Edit Page</h1>
+
+        <div class="text-left">
+            <img th:src="'data:image/jpeg;base64, ' + ${personnel.image}" class="personnel-image" alt="Personnel Image">
+        </div>
+
+        <div>
+            <label class="info-label">ID:</label>
+            <span class="info-value" th:text="${personnel.id}"></span><br>
+
+            <label class="info-label">Förnamn:</label>
+            <span class="info-value" th:text="${personnel.firstName}"></span><br>
+
+            <label class="info-label">Efternamn:</label>
+            <span class="info-value" th:text="${personnel.lastName}"></span><br>
+
+            <label class="info-label">Militärgren:</label>
+            <span class="info-value" th:text="${personnel.branch}"></span><br>
+
+            <label class="info-label">Landstillhörighet:</label>
+            <span class="info-value" th:text="${personnel.countryAllegiance}"></span><br>
+
+            <label class="info-label">Rank:</label>
+            <span class="info-value" th:text="${personnel.rank}"></span><br>
+
+            <label class="info-label">Hemadress:</label>
+            <span class="info-value" th:text="${personnel.homeAddress}"></span><br>
+
+            <label class="info-label">Lades till av:</label>
+            <span class="info-value" th:text="${personnel.customUser.username}"></span><br>
+        </div>
+
+        <h2 th:if="${personnel.images != null and not #lists.isEmpty(personnel.images)}" class="section-heading">Bilder</h2>
+        <div th:if="${personnel.images != null and not #lists.isEmpty(personnel.images)}" class="text-left image-gallery">
+            <span th:each="image : ${personnel.images}">
+                <img th:src="'data:image/jpeg;base64, ' + ${image}" alt="image" class="personnel-image">
+            </span>
+        </div>
+
+        <h2 th:if="${personnel.description != null and personnel.description.trim() != ''}" class="section-heading">Beskrivning</h2>
+        <p th:text="${personnel.description}"></p>
+
+        <h2 sec:authorize="hasRole('ADMIN')" class="section-heading">Redigera Information</h2>
+        <form sec:authorize="hasRole('ADMIN')" th:action="@{/edit}" th:object="${personnel}" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:field="*{id}">
+
+            <label>Huvudbild
+                <input type="file" name="imageFile" id="picture">
+            </label>
+
+            <label>Bilder
+                <input type="file" name="imageFiles" id="pictures" multiple>
+            </label>
+
+            <label>Förnamn:
+                <input type="text" th:field="*{firstName}">
+            </label>
+
+            <label>Efternamn:
+                <input type="text" th:field="*{lastName}">
+            </label>
+
+            <label>Försvarsgren:
+                <input type="text" th:field="*{branch}">
+            </label>
+
+            <label>Rank:
+                <input type="text" th:field="*{rank}">
+            </label>
+
+            <label>Hemadress:
+                <input type="text" th:field="*{homeAddress}">
+            </label>
+
+            <label>Land:
+                <select th:field="*{countryAllegiance}">
+                    <option th:each="index : ${countries}" th:value="${index}" th:text="${index}"></option>
+                </select>
+            </label>
+
+            <div>
+                <label>Beskrivning:
+                    <textarea th:field="*{description}"></textarea>
+                </label>
+            </div>
 
 
-    <label>Militärgren:
-        <span th:text="${personnel.branch}"></span>
-    </label>
-    <br/>
+            <button type="submit" class="btn btn-primary btn-block">Spara ändringar</button>
 
-
-    <label>Landstillhörighet:
-        <span th:text="${personnel.countryAllegiance}"></span>
-    </label>
-    <br/>
-
-    <label>Rank:
-        <span th:text="${personnel.rank}"></span>
-    </label>
-    <br/>
-
-    <label>Hemaddress:
-        <span th:text="${personnel.homeAddress}"></span>
-    </label>
-    <br/>
-
-
-    <span>Lades till av: </span><span th:text="${personnel.customUser.username}"></span>
-
-    <br/>
-    <br/>
-
+        </form>
+    </div>
 
 
     <!--
-    <img th:src="'/getimage/'+ ${personnel.id}" style="max-width: 200px">
-    -->
+    <img th:src="'data:image/jpeg;base64, ' + ${personnel.image}" style="max-width: 200px">
 
     <span th:each="image : ${personnel.images}">
         <img th:src="'data:image/jpeg;base64, ' + ${image}" alt="image" style="max-width: 200px">
     </span>
-
-    <span th:text="${personnel.description}"></span>
-
-    <br/>
-    <br/>
-
-
-    <form sec:authorize="hasRole('ADMIN')" th:action="@{/edit}" th:object="${personnel}" method="post" enctype="multipart/form-data">
-        <input type="hidden" th:field="*{id}">
-
-        <label sec:authorize="hasRole('ADMIN')">Huvudbild
-            <input type="file" name="imageFile" id="picture" class="file" placeholder="Bild" >
-        </label>
-        <br/>
-
-
-
-        <label>Bilder
-            <input type="file" name="imageFiles" id="pictures" class="file" placeholder="Bild" multiple >
-        </label>
-        <p th:if="${error}" th:text="${error}" style="color: red"></p>
-        </br>
-        </br>
-
-        <label>Förnamn:
-            <input type="text" th:field="*{firstName}">
-        </label>
-        </br>
-        </br>
-
-
-        <label>Efternamn:
-            <input type="text" th:field="*{lastName}">
-        </label>
-        </br>
-        </br>
-
-        <label>Försvarsgren:
-            <input type="text" th:field="*{branch}">
-        </label>
-        </br>
-        </br>
-
-        <label>Rank:
-            <input type="text" th:field="*{rank}">
-        </label>
-        <br/>
-        <br/>
-
-        <label>Hemadress:
-            <input type="text" th:field="*{homeAddress}">
-        </label>
-
-        <label>Land:
-            <select th:field="*{countryAllegiance}">
-                <option th:each="index : ${countries}" th:value="${index}" th:text="${index}"></option>
-            </select>
-        </label>
-        </br>
-        </br>
-
-        <label>Beskrivning:
-            <textarea th:field="*{description}"></textarea>
-        </label>
-        <br/>
-        <br/>
-
-
-        <button type="submit">Ändra</button>
-
-    </form>
-
-    <!--
-    <img th:src="'data:image/jpeg;base64, ' + ${personnel.image}" style="max-width: 200px">
-
-    <span th:each="image : ${personnel.images}">
-        <img th:src="'data:image/jpeg;base64, ' + ${image}" alt="image" style="max-width: 200px">
-    </span>
     -->
 
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 </body>
 </html>

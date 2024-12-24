@@ -1,54 +1,163 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
-      xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Index</title>
-</head>
-<body>
-    <h1>Index page</h1>
-    <br/>
-    <a href="/random">See random fact</a>
-    <br/>
-    <br/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        /* Consistent Spacing and Mobile Responsiveness */
+        .content {
+            margin-top: 80px;
+        }
 
-    <div sec:authorize="isAnonymous()">
-        <a href="/register"><button>Registrera</button></a>
-        <br/>
+        .btn-custom {
+            margin: 5px;
+        }
+
+        /* Navbar Enhancements */
+        .navbar {
+            font-size: 0.95rem;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff !important; /* Ensure white text */
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #0056b3 !important; /* Brighter blue highlight */
+            color: #ffffff !important;
+        }
+
+        .navbar-nav .btn-outline-light {
+            font-size: 0.9rem;
+            margin-top: 2px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar-nav .btn-outline-light:hover {
+            background-color: #ffffff !important;
+            color: #0056b3 !important;
+            border-color: #ffffff !important;
+        }
+
+
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .section-heading {
+            margin-top: 20px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <a class="navbar-brand" href="/">Personnel System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- Left-Side Links -->
+        <ul class="navbar-nav mr-auto">
+
+            <li class="nav-item">
+                <a class="nav-link" href="/getPersonnel">All Personnel</a>
+            </li>
+            <li class="nav-item" sec:authorize="hasAuthority('POST')">
+                <a class="nav-link" href="/personnel">Lägg till Uppgifter</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/random">Random Fact</a>
+            </li>
+        </ul>
+
+        <!-- Right-Side Links -->
+        <ul class="navbar-nav">
+            <li class="nav-item" sec:authorize="hasAuthority('GET')">
+                <a class="nav-link" href="/user">Användarsidan</a>
+            </li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link" href="/admin">Admin Sida</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAnonymous()">
+                <a class="nav-link" href="/register">Registrera</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAnonymous()">
+                <a class="nav-link" href="/login">Logga in</a>
+            </li>
+            <li class="nav-item" sec:authorize="hasAuthority('GET')">
+                <form th:action="@{/logout}" method="post" class="form-inline">
+                    <button type="submit" class="btn btn-sm btn-outline-light ml-2">Logga ut</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<!-- Main Content -->
+<div class="container content">
+    <h1 class="text-center mb-4">Välkommen till Indexsidan</h1>
+
+    <!-- Random Fact Section -->
+    <div class="text-center mb-4">
+        <a href="/random" class="btn btn-primary btn-custom">Se Random Fakt</a>
     </div>
 
-
-    <div>
-        <br/>
-        <a sec:authorize="isAnonymous()" href="/login"><button>Logga in</button></a>
-
-        <form sec:authorize="hasAuthority('GET')" th:action="@{/logout}" method="post">
-            <button type="submit">Logga ut</button>
+    <!-- Authentication Buttons -->
+    <div class="section-heading">Autentisering</div>
+    <div class="text-center mb-4">
+        <a sec:authorize="isAnonymous()" href="/register" class="btn btn-outline-success btn-custom">Registrera</a>
+        <a sec:authorize="isAnonymous()" href="/login" class="btn btn-outline-primary btn-custom">Logga in</a>
+        <form sec:authorize="hasAuthority('GET')" th:action="@{/logout}" method="post" class="d-inline">
+            <button type="submit" class="btn btn-outline-danger btn-custom">Logga ut</button>
         </form>
     </div>
-    <br/>
 
-    <a href="/allpersonnel">Se alla personnel</a>
-    <br/>
-    <br/>
-
-    <a href="/getPersonnel"><button>All Personnel</button></a>
-
-    <div sec:authorize="hasAuthority('POST')">
-        <a href="/personnel"><button>Lägg till uppgifter</button></a>
-    </div>
-    <br/>
-    <br/>
-
-    <div sec:authorize="hasAuthority('GET')">
-        <a href="/user"><button>Gå till användarsidan</button></a>
-    </div>
-    <br/>
-
-    <div sec:authorize="hasRole('ADMIN')">
-        <a href="/admin"><button>Till Admin sida</button></a>
-
+    <!-- Personnel Section -->
+    <div class="section-heading">Personal</div>
+    <div class="text-center mb-4">
+        <a href="/allpersonnel" class="btn btn-secondary btn-custom">Se Alla Personnel</a>
+        <a href="/getPersonnel" class="btn btn-outline-secondary btn-custom">All Personnel</a>
     </div>
 
+    <!-- Additional Options -->
+    <div sec:authorize="hasAuthority('POST')" class="text-center mb-2">
+        <a href="/personnel" class="btn btn-outline-info btn-custom">Lägg till Uppgifter</a>
+    </div>
+    <div sec:authorize="hasAuthority('GET')" class="text-center mb-2">
+        <a href="/user" class="btn btn-outline-warning btn-custom">Gå till Användarsidan</a>
+    </div>
+    <div sec:authorize="hasRole('ADMIN')" class="text-center mb-4">
+        <a href="/admin" class="btn btn-outline-danger btn-custom">Till Admin Sida</a>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-white py-3 border-top">
+    <p>&copy; 2024 Personnel System. Alla rättigheter förbehållna.</p>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
