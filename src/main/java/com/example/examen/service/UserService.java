@@ -7,6 +7,7 @@ import com.example.examen.dto.UserDTO;
 import com.example.examen.model.CustomUser;
 import com.example.examen.model.Personnel;
 import jakarta.transaction.Transactional;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Cacheable(cacheNames = "users_by_username", key = "#username")
     public Optional<CustomUser> findUserByUsername(String username) {
         return userDAO.findByUsername(username);
     }
@@ -93,6 +95,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    //@Cacheable(cacheNames = "all_users", key = "all")
     public List<CustomUser> getAllUsers() {
         return userDAO.getAllUsers();
     }

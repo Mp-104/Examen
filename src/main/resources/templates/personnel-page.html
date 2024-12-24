@@ -1,148 +1,208 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Personal page</title>
+    <title>Personal Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        /* Navbar Enhancements */
+        .navbar {
+            font-size: 0.95rem;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff !important;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #0056b3 !important;
+            color: #ffffff !important;
+        }
+
+        .navbar-nav .btn-outline-light {
+            font-size: 0.9rem;
+            margin-top: 2px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar-nav .btn-outline-light:hover {
+            background-color: #ffffff !important;
+            color: #0056b3 !important;
+            border-color: #ffffff !important;
+        }
+
+        /* Page Enhancements */
+        body {
+            margin-top: 80px;
+            background-color: #f9fafc;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        form label {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        form input[type="text"],
+        form input[type="file"],
+        form select,
+        form textarea {
+            margin-bottom: 15px;
+        }
+
+        form button {
+            margin-top: 20px;
+        }
+
+        .personnel-list {
+            margin-top: 40px;
+        }
+
+        .personnel-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        .personnel-item img {
+            max-width: 150px;
+            border-radius: 8px;
+            margin-right: 15px;
+        }
+
+        .personnel-item button {
+            margin-top: 10px;
+        }
+
+        .form-inline button {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-<h1>Personnel page Add</h1>
 
-    <form th:object="${personnel}" th:action="@{/personnel}" method="post" enctype="multipart/form-data">
-
-        <label>Huvudbild
-            <input type="file" name="imageFile" id="picture" class="file" placeholder="Bild" >
-        </label>
-
-        <br/>
-        <br/>
-
-
-        <label>Bilder
-            <input type="file" name="imageFiles" id="pictures" class="file" placeholder="Bild" multiple >
-        </label>
-        <p th:if="${error}" th:text="${error}" style="color: red"></p>
-        <br/>
-        <br/>
-
-        <label>Förnamn:
-            <input type="text" name="firstName" th:field="*{firstName}">
-        </label>
-        <br/>
-        <br/>
-
-        <label>Efternamn:
-            <input type="text" name="lastName" th:field="*{lastName}">
-        </label>
-        <br/>
-        <br/>
-
-
-        <label>Försvarsgren:
-            <input type="text" name="branch" th:field="*{branch}">
-        </label>
-        <br/>
-        <br/>
-
-        <label>Rank:
-            <input type="text" name="rank" th:field="*{rank}">
-        </label>
-        <br/>
-        <br/>
-
-        <!--
-        <label>Land:
-            <input type="text" name="countryAllegiance" th:field="*{countryAllegiance}">
-        </label>
-        -->
-        <label>Hemadress:
-            <input type="text" name="homeAddress" th:field="*{homeAddress}">
-        </label>
-
-        <label>Land:
-            <select th:field="*{countryAllegiance}">
-                <option th:each="index : ${countries}" th:value="${index}" th:text="${index}"></option>
-            </select>
-        </label>
-        <br/>
-        <br/>
-
-        <label>Beskrivning:
-            <textarea th:field="*{description}"></textarea>
-        </label>
-        <br/>
-        <br/>
-
-        <button type="submit">Lägg till</button>
-    </form>
-
-    <div th:if="${added}">
-        <p th:text="${added}"></p>
-    </div>
-
-    <br/>
-
-    <div>
-        <ul>
-
-            <li th:each="personnel : ${personnelList}">
-
-                <span th:text="${personnel.firstName}"></span> <span> </span> <span th:text="${personnel.lastName}"></span>
-
-                <img th:src="'data:image/jpeg;base64, ' + ${personnel.image}" style="max-width: 200px">
-
-
-                <span th:each="image : ${personnel.images}">
-                    <img th:src="'data:image/jpeg;base64, ' + ${image}" alt="image" style="max-width: 200px">
-                </span>
-
-
-                <!--
-                <form th:action="@{/personnel-info/{id}(id=${personnel.id})}" th:object="${personnel}" method="get">
-                    <button type="submit">Se detaljer (id)</button>
-
-                </form>
-                -->
-
-                <form th:action="@{/personnel-info}" th:object="${personnel}" method="post" >
-
-                    <input type="hidden" th:name="id" th:value="${personnel.id}">
-
-                    <!--
-                    <input type="hidden" th:name="firstName" th:value="${personnel.firstName}">
-                    <input type="hidden" th:name="lastName" th:value="${personnel.lastName}">
-
-                    <input type="hidden" th:name="rank" th:value="${personnel.rank}">
-                    <input type="hidden" th:name="branch" th:value="${personnel.branch}">
-                    <input type="hidden" th:name="homeAddress" th:value="${personnel.homeAddress}">
-                    <input type="hidden" th:name="countryAllegiance" th:value="${personnel.countryAllegiance}">
-                    <input type="hidden" th:name="description" th:value="${personnel.description}">
-
-                    <input type="hidden" th:name="image" th:value="${personnel.image}">
-                    -->
-
-                    <!-- parsing images directly such as:
-                    <input type="hidden" th:name="images" th:value="${personnel.images}" >
-
-                    will result in incorrect parsing which subsequently will not render them properly.
-
-                    thus a for each loop is used to parse each image individually
-
-                    -->
-                    <!--
-                    <span th:each="image : ${personnel.images}">
-                        <input type="hidden" th:name="images" th:value="${image}">
-                    </span>
-                    -->
-
-                    <button type="submit">Se detaljer (personnel)</button>
-
-                </form>
-
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <a class="navbar-brand" href="/">Personnel System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/getPersonnel">All Personnel</a>
             </li>
-
+            <li class="nav-item" sec:authorize="hasAuthority('POST')">
+                <a class="nav-link" href="/personnel">Lägg till Uppgifter</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/random">Random Fact</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            <li class="nav-item" sec:authorize="hasAuthority('GET')">
+                <a class="nav-link" href="/user">Användarsidan</a>
+            </li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link" href="/admin">Admin Sida</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAnonymous()">
+                <a class="nav-link" href="/register">Registrera</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAnonymous()">
+                <a class="nav-link" href="/login">Logga in</a>
+            </li>
+            <li class="nav-item" sec:authorize="hasAuthority('GET')">
+                <form th:action="@{/logout}" method="post" class="form-inline">
+                    <button type="submit" class="btn btn-sm btn-outline-light ml-2">Logga ut</button>
+                </form>
+            </li>
         </ul>
     </div>
+</nav>
 
+<!-- Main Content -->
+<div class="container">
+    <h1>Lägg till Personal</h1>
+    <form th:object="${personnel}" th:action="@{/personnel}" method="post" enctype="multipart/form-data">
+        <label>Huvudbild:</label>
+        <input type="file" name="imageFile" class="form-control">
+
+        <label>Bilder:</label>
+        <input type="file" name="imageFiles" class="form-control" multiple>
+
+        <label>Förnamn:</label>
+        <input type="text" name="firstName" class="form-control" th:field="*{firstName}">
+
+        <label>Efternamn:</label>
+        <input type="text" name="lastName" class="form-control" th:field="*{lastName}">
+
+        <label>Försvarsgren:</label>
+        <input type="text" name="branch" class="form-control" th:field="*{branch}">
+
+        <label>Rank:</label>
+        <input type="text" name="rank" class="form-control" th:field="*{rank}">
+
+        <label>Hemadress:</label>
+        <input type="text" name="homeAddress" class="form-control" th:field="*{homeAddress}">
+
+        <label>Land:</label>
+        <select class="form-control" th:field="*{countryAllegiance}">
+            <option th:each="index : ${countries}" th:value="${index}" th:text="${index}"></option>
+        </select>
+
+        <label>Beskrivning:</label>
+        <textarea class="form-control" th:field="*{description}"></textarea>
+
+        <button type="submit" class="btn btn-primary btn-block">Lägg till</button>
+    </form>
+
+    <!-- Personnel List -->
+    <ul class="list-group mb-4">
+        <li class="list-group-item personnel-item" th:each="personnel : ${personnelList}">
+            <div class="d-flex flex-column flex-sm-row align-items-center">
+                <div class="mb-2 mb-sm-0 mr-sm-3">
+                    <img th:src="'data:image/jpeg;base64, ' + ${personnel.image}" class="img-thumbnail"
+                         style="max-width: 200px;">
+                </div>
+                <div class="text-center text-sm-left">
+                    <p><strong>ID:</strong> <span th:text="${personnel.id}"></span></p>
+                    <p><strong>Namn:</strong> <span th:text="${personnel.firstName}"></span> <span th:text="${personnel.lastName}"></span></p>
+                    <p><strong>Rank:</strong> <span th:text="${personnel.rank}"></span></p>
+                    <p><strong>Country Allegiance:</strong> <span th:text="${personnel.countryAllegiance}"></span></p>
+                    <form th:action="@{/personnel-info}" th:object="${personnel}" method="get">
+                        <input type="hidden" th:name="id" th:value="${personnel.id}">
+                        <button type="submit" class="btn btn-sm btn-outline-info">Se detaljer</button>
+                    </form>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+</div>
 
 </body>
 </html>

@@ -1,18 +1,161 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        /* General Styling */
+        body {
+            margin-top: 80px;
+            background-color: #f9fafc;
+        }
+
+        /* Navbar Enhancements */
+        .navbar {
+            font-size: 0.95rem;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff !important; /* Ensure white text */
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #0056b3 !important; /* Brighter blue highlight */
+            color: #ffffff !important;
+        }
+
+        .navbar-nav .btn-outline-light {
+            font-size: 0.9rem;
+            margin-top: 2px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar-nav .btn-outline-light:hover {
+            background-color: #ffffff !important;
+            color: #0056b3 !important;
+            border-color: #ffffff !important;
+        }
+
+        /* Admin Container */
+        .admin-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .admin-container .btn {
+            width: 100%;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .admin-container .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .admin-container .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+        .admin-container .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .admin-container .btn-primary:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+    </style>
 </head>
 <body>
-    <h2>Admin page</h2>
-    <br/>
-    <br/>
 
-    <a href="/delete"><button>Ta bort personnel</button></a>
-    <br/>
-    <br/>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <a class="navbar-brand" href="/">Personnel System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- Left-Side Links -->
+        <ul class="navbar-nav mr-auto">
 
-    <a href="/admin/users"><button>Hantera användare</button></a>
+            <li class="nav-item">
+                <a class="nav-link" href="/getPersonnel">All Personnel</a>
+            </li>
+            <li class="nav-item" sec:authorize="hasAuthority('POST')">
+                <a class="nav-link" href="/personnel">Lägg till Uppgifter</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/random">Random Fact</a>
+            </li>
+        </ul>
+
+        <!-- Right-Side Links -->
+        <ul class="navbar-nav">
+            <li class="nav-item" sec:authorize="hasAuthority('GET')">
+                <a class="nav-link" href="/user">Användarsidan</a>
+            </li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link" href="/admin">Admin Sida</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAnonymous()">
+                <a class="nav-link" href="/register">Registrera</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAnonymous()">
+                <a class="nav-link" href="/login">Logga in</a>
+            </li>
+            <li class="nav-item" sec:authorize="hasAuthority('GET')">
+                <form th:action="@{/logout}" method="post" class="form-inline">
+                    <button type="submit" class="btn btn-sm btn-outline-light ml-2">Logga ut</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Admin Page Content -->
+<div class="admin-container">
+    <h2>Admin Page</h2>
+
+    <a href="/delete">
+        <button class="btn btn-danger">Ta bort personnel</button>
+    </a>
+
+    <a href="/admin/users">
+        <button class="btn btn-primary">Hantera användare</button>
+    </a>
+</div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9C9KNl5HeEk1f5l1Fq5W5f5P5L5g5U5D5E5O5" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>

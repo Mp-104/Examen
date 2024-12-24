@@ -1,115 +1,276 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Hantera användare</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        /* General Styling */
+        body {
+            margin-top: 80px;
+            background-color: #f9fafc;
+        }
+
+        /* Navbar Enhancements */
+        .navbar {
+            font-size: 0.95rem;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff !important; /* Ensure white text */
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #0056b3 !important; /* Brighter blue highlight */
+            color: #ffffff !important;
+        }
+
+        .navbar-nav .btn-outline-light {
+            font-size: 0.9rem;
+            margin-top: 2px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar-nav .btn-outline-light:hover {
+            background-color: #ffffff !important;
+            color: #0056b3 !important;
+            border-color: #ffffff !important;
+        }
+
+        /* User Management Container */
+        .user-management-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-management-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.1rem;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-group button:hover {
+            background-color: #004085;
+        }
+
+        .user-details {
+            margin-bottom: 30px;
+        }
+
+        .user-details span {
+            font-weight: bold;
+        }
+
+        .user-details h3 {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: normal;
+        }
+
+        .delete-form {
+            margin-top: 30px;
+        }
+
+        .personnel-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .personnel-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .personnel-list li span {
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h2>Admin User Page</h2>
 
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <a class="navbar-brand" href="/">Personnel System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- Left-Side Links -->
+        <ul class="navbar-nav mr-auto">
+
+            <li class="nav-item">
+                <a class="nav-link" href="/getPersonnel">All Personnel</a>
+            </li>
+            <li class="nav-item" sec:authorize="hasAuthority('POST')">
+                <a class="nav-link" href="/personnel">Lägg till Uppgifter</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/random">Random Fact</a>
+            </li>
+        </ul>
+
+        <!-- Right-Side Links -->
+        <ul class="navbar-nav">
+            <li class="nav-item" sec:authorize="hasAuthority('GET')">
+                <a class="nav-link" href="/user">Användarsidan</a>
+            </li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link" href="/admin">Admin Sida</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAnonymous()">
+                <a class="nav-link" href="/register">Registrera</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAnonymous()">
+                <a class="nav-link" href="/login">Logga in</a>
+            </li>
+            <li class="nav-item" sec:authorize="hasAuthority('GET')">
+                <form th:action="@{/logout}" method="post" class="form-inline">
+                    <button type="submit" class="btn btn-sm btn-outline-light ml-2">Logga ut</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Admin User Management Content -->
+<div class="user-management-container">
+    <h2>Hantera Användare</h2>
+
+    <!-- If user exists -->
     <div th:if="${user != null}">
-        <span>Email: </span><h3 th:text="${user.username}"></h3>
-        <br/>
+        <div class="user-details">
+            <span>Email: </span><h3 th:text="${user.username}"></h3>
+            <br/>
 
-        <span>Is Enabled? </span><span th:text="${user.isEnabled}"></span>
-        <br/>
-        <br/>
+            <span>Is Enabled? </span><span th:text="${user.isEnabled}"></span>
+        </div>
 
+        <!-- User Edit Form -->
         <form th:action="@{/admin/users/edit}" th:object="${user}" method="post">
             <input type="hidden" th:field="*{id}">
 
-            <label>Email:
+            <div class="form-group">
+                <label>Email:</label>
                 <input type="text" th:field="*{username}">
-            </label>
-            <br/>
-            <br/>
+            </div>
 
-            <label>Lösenord:
-                <input type="text" th:field="*{password}" >
-            </label>
-            <br/>
-            <br/>
+            <div class="form-group">
+                <label>Lösenord:</label>
+                <input type="text" th:field="*{password}">
+            </div>
 
-            <label>Förnamn:
-                <input type="text" th:field="*{firstName}" >
-            </label>
-            <br/>
-            <br/>
+            <div class="form-group">
+                <label>Förnamn:</label>
+                <input type="text" th:field="*{firstName}">
+            </div>
 
-            <label>Efternamn:
-                <input type="text" th:field="*{lastName}" >
-            </label>
-            <br/>
-            <br/>
+            <div class="form-group">
+                <label>Efternamn:</label>
+                <input type="text" th:field="*{lastName}">
+            </div>
 
-            <label>Roll:
+            <div class="form-group">
+                <label>Roll:</label>
                 <select th:field="*{userRole}">
                     <option th:each="index : ${roles}" th:value="${index}" th:text="${index}"></option>
                 </select>
-            </label>
-            <br/>
-            <br/>
+            </div>
 
-            <label>Is account non expired:
-                <input type="checkbox"  th:field="*{isAccountNonExpired}">
-            </label>
-            <br/>
-            <br/>
+            <div class="form-group">
+                <label>Is account non expired:</label>
+                <input type="checkbox" th:field="*{isAccountNonExpired}">
+            </div>
 
-            <label>Is account non locked:
-                <input type="checkbox"  th:field="*{isAccountNonLocked}">
-            </label>
-            <br/>
-            <br/>
+            <div class="form-group">
+                <label>Is account non locked:</label>
+                <input type="checkbox" th:field="*{isAccountNonLocked}">
+            </div>
 
-            <label>Is credential non expired:
-                <input type="checkbox"  th:field="*{isCredentialNonExpired}">
-            </label>
-            <br/>
-            <br/>
+            <div class="form-group">
+                <label>Is credential non expired:</label>
+                <input type="checkbox" th:field="*{isCredentialNonExpired}">
+            </div>
 
+            <div class="form-group">
+                <label>Is enabled:</label>
+                <input type="checkbox" th:field="*{isEnabled}">
+            </div>
 
-            <label>Is enabled(th:field):
-                <input type="checkbox"  th:field="*{isEnabled}">
-            </label>
-            <br/>
-            <br/>
-
-            <button type="submit">Ändra</button>
-
+            <button type="submit" class="btn btn-primary">Ändra</button>
         </form>
 
-        <br/>
-
-        <form th:action="@{/admin/users/delete}" th:object="${user}" method="post">
+        <!-- Delete User Form -->
+        <form th:action="@{/admin/users/delete}" th:object="${user}" method="post" class="delete-form">
             <input type="hidden" th:field="*{id}">
 
-            <label for="password">Lösenord: </label><input type="password" id="password" name="password" required>
+            <label for="password">Lösenord:</label>
+            <input type="password" id="password" name="password" required>
 
-            <button type="submit">Radera användare</button>
+            <button type="submit" class="btn btn-danger">Radera användare</button>
         </form>
-        <p th:if="${status}" th:text="${status}"></p>
 
-        <br/>
+        <p th:if="${status}" th:text="${status}" class="text-success font-weight-bold"></p>
 
+        <!-- Personnel List -->
         <p>Tillagda personnel:</p>
-        <br/>
-        <ul>
+        <ul class="personnel-list">
             <li th:each="personnel : ${user.personnelList}">
                 <span>ID: </span><span th:text="${personnel.id}"></span>
                 <span>Rank: </span><span th:text="${personnel.rank}"></span>
                 <span>Efternamn: </span><span th:text="${personnel.lastName}"></span>
-
             </li>
         </ul>
-
-
-
     </div>
 
+    <!-- If user does not exist -->
     <div th:if="${user == null}">
-        <h3>ingen användare</h3>
+        <h3>Ingen användare</h3>
     </div>
+</div>
 
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9C9KNl5HeEk1f5l1Fq5W5f5P5L5g5U5D5E5O5" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>

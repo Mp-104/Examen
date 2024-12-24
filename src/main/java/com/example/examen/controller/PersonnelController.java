@@ -37,20 +37,31 @@ public class PersonnelController {
     @Transactional
     public String getPersonalPage (Model model) {
 
+        /*
         CustomUser loggedInUser = userService.findUserByUsername(
                 getLoggedInUser()
                 //"test"
         ).get();
         List<Personnel> usersPersonnelList = loggedInUser.getPersonnelList();
 
+         */
+
 //        Personnel firstPersonnel = usersPersonnelList.get(0);
 //
 //        model.addAttribute("firstPersonnel", firstPersonnel);
 
+        List<Personnel> allPersonnel = personnelService.findAll();
+        List<Personnel> loggedInUsersList = new ArrayList<>();
+
+        for (Personnel personnel : allPersonnel) {
+            if (Objects.equals(personnel.getCustomUser().getUsername(), getLoggedInUser())) {
+                loggedInUsersList.add(personnel);
+            }
+        }
 
 
         model.addAttribute("personnel", new Personnel());
-        model.addAttribute("personnelList", usersPersonnelList);
+        model.addAttribute("personnelList", loggedInUsersList);
 
         model.addAttribute("countries", getAllNatoCountries());
 

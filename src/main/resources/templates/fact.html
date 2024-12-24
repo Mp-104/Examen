@@ -1,15 +1,101 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <title>Fact</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <style>
+        /* Navbar Enhancements */
+        .navbar {
+            font-size: 0.95rem;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff !important; /* Ensure white text */
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #0056b3 !important; /* Brighter blue highlight */
+            color: #ffffff !important;
+        }
+
+        .navbar-nav .btn-outline-light {
+            font-size: 0.9rem;
+            margin-top: 2px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar-nav .btn-outline-light:hover {
+            background-color: #ffffff !important;
+            color: #0056b3 !important;
+            border-color: #ffffff !important;
+        }
+    </style>
 </head>
 <body>
-    <h2 th:text="${fact.text}"></h2>
-    <h3 th:text="${fact.source}"></h3>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <a class="navbar-brand" href="/">Personnel System</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- Left-Side Links -->
+            <ul class="navbar-nav mr-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/getPersonnel">All Personnel</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAuthority('POST')">
+                    <a class="nav-link" href="/personnel">Lägg till Uppgifter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/random">Random Fact</a>
+                </li>
+            </ul>
+
+            <!-- Right-Side Links -->
+            <ul class="navbar-nav">
+                <li class="nav-item" sec:authorize="hasAuthority('GET')">
+                    <a class="nav-link" href="/user">Användarsidan</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" href="/admin">Admin Sida</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" href="/register">Registrera</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" href="/login">Logga in</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAuthority('GET')">
+                    <form th:action="@{/logout}" method="post" class="form-inline">
+                        <button type="submit" class="btn btn-sm btn-outline-light ml-2">Logga ut</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
     <br/>
+    <br/>
+    <br/>
+    <br/>
+    <div class="container mt-4">
+        <h2 th:text="${fact.text}"></h2>
+        <h3 th:text="${fact.source}"></h3>
+        <br/>
 
-    <button onclick="window.location.reload();">Se annan</button>
-
+        <button onclick="window.location.reload();" class="btn btn-primary btn-">Se annan</button>
+    </div>
 </body>
 </html>

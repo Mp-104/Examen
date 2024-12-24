@@ -1,79 +1,185 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <title>Registrering</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <style>
+    /* Navbar Enhancements */
+    .navbar {
+        font-size: 0.95rem;
+    }
+
+    .navbar-brand {
+        font-weight: bold;
+    }
+
+    .navbar-nav .nav-link {
+        color: #fff !important;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        border-radius: 4px;
+    }
+
+    .navbar-nav .nav-link:hover {
+        background-color: #0056b3 !important;
+        color: #ffffff !important;
+    }
+
+    .navbar-nav .btn-outline-light {
+        font-size: 0.9rem;
+        margin-top: 2px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .navbar-nav .btn-outline-light:hover {
+        background-color: #ffffff !important;
+        color: #0056b3 !important;
+        border-color: #ffffff !important;
+    }
+
+    /* Page Styling */
+    body {
+        margin-top: 80px;
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 1.8rem;
+        color: #0056b3;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-group input {
+        margin-bottom: 10px;
+    }
+
+    .error {
+        color: red;
+        font-size: 0.9rem;
+    }
+
+
+
+    button[type="submit"]:hover {
+        background-color: #004494;
+    }
+
+    a.back-link {
+        display: block;
+        margin-top: 20px;
+        text-align: center;
+        color: #0056b3;
+        font-weight: bold;
+    }
+
+    a.back-link:hover {
+        text-decoration: underline;
+    }
+
+    .status-message {
+        text-align: center;
+        margin-top: 20px;
+        font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-<h1>Registrera ny användare</h1>
-<a href="/">Tillbaka till huvud/loginsida</a>
 
-<br/>
-<br/>
-
-<form th:action="@{/register}" th:object="${newUser}" method="post">
-
-  <label>Förnamn:
-    <input type="text" name="firstName" th:field="*{firstName}">
-  </label>
-  <br/>
-  <div th:if="${#fields.hasErrors('firstName')}" class="error">
-
-    <ul>
-      <li th:each="err : ${#fields.errors('firstName')}" th:text="${err}"></li>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+  <a class="navbar-brand" href="/">Personnel System</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item"><a class="nav-link" href="/getPersonnel">All Personnel</a></li>
+      <li class="nav-item" sec:authorize="hasAuthority('POST')"><a class="nav-link" href="/personnel">Lägg till Uppgifter</a></li>
+      <li class="nav-item"><a class="nav-link" href="/random">Random Fact</a></li>
     </ul>
-
-  </div>
-
-  <label>Efternamn:
-    <input type="text" name="lastName" th:field="*{lastName}">
-  </label>
-  <br/>
-  <div th:if="${#fields.hasErrors('lastName')}" class="error">
-    <ul>
-      <li th:each="err : ${#fields.errors('lastName')}" th:text="${err}"></li>
+    <ul class="navbar-nav">
+      <li class="nav-item" sec:authorize="hasAuthority('GET')"><a class="nav-link" href="/user">Användarsidan</a></li>
+      <li class="nav-item" sec:authorize="hasRole('ADMIN')"><a class="nav-link" href="/admin">Admin Sida</a></li>
+      <li class="nav-item" sec:authorize="isAnonymous()"><a class="nav-link" href="/register">Registrera</a></li>
+      <li class="nav-item" sec:authorize="isAnonymous()"><a class="nav-link" href="/login">Logga in</a></li>
+      <li class="nav-item" sec:authorize="hasAuthority('GET')">
+        <form th:action="@{/logout}" method="post" class="form-inline">
+          <button type="submit" class="btn btn-sm btn-outline-light ml-2">Logga ut</button>
+        </form>
+      </li>
     </ul>
   </div>
+</nav>
+
+<div class="container">
+  <h1>Registrera ny användare</h1>
+  <form th:action="@{/register}" th:object="${newUser}" method="post">
+    <div class="form-group">
+      <label>Förnamn:</label>
+      <input type="text" class="form-control" name="firstName" th:field="*{firstName}">
+      <div th:if="${#fields.hasErrors('firstName')}" class="error">
+        <ul>
+          <li th:each="err : ${#fields.errors('firstName')}" th:text="${err}"></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Efternamn:</label>
+      <input type="text" class="form-control" name="lastName" th:field="*{lastName}">
+      <div th:if="${#fields.hasErrors('lastName')}" class="error">
+        <ul>
+          <li th:each="err : ${#fields.errors('lastName')}" th:text="${err}"></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Email:</label>
+      <input type="text" class="form-control" name="username" th:field="*{username}">
+      <div th:if="${#fields.hasErrors('username')}" class="error">
+        <ul>
+          <li th:each="err : ${#fields.errors('username')}" th:text="${err}"></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Lösenord:</label>
+      <input type="password" class="form-control" name="password" th:field="*{password}">
+      <div th:if="${#fields.hasErrors('password')}" class="error">
+        <ul>
+          <li th:each="err : ${#fields.errors('password')}" th:text="${err}"></li>
+        </ul>
+      </div>
+    </div>
+    <br/>
 
 
-  <label>Email:
-    <input type="text" name="username" th:field="*{username}">
-  </label>
-  <div th:if="${#fields.hasErrors('username')}" class="error">
-    <ul>
-      <li th:each="err : ${#fields.errors('username')}" th:text="${err}"></li>
-    </ul>
+    <button type="submit" class="btn btn-primary btn-block">Registrera!</button>
+  </form>
+
+  <a href="/" class="back-link">Tillbaka till huvud/loginsida</a>
+
+  <div class="status-message">
+    <span th:text="${status}"></span>
   </div>
-  <br/>
-
-  <label>Password
-    <input type="password" name="password" th:field="*{password}">
-  </label>
-  <div th:if="${#fields.hasErrors('password')}" class="error">
-    <ul>
-      <li th:each="err : ${#fields.errors('password')}" th:text="${err}"></li>
-    </ul>
-  </div>
-  <br/>
-  <br/>
-
-
-
-  <button type="submit">Registrera!</button>
-
-</form>
-
-
-
-<br/>
-
-<div th:if="${status != 'användare registrerad'}">
-  <span th:text="${status}"></span>
 </div>
-
-<div th:if="${status == 'användare registrerad'}">
-  <span th:text="${status}"></span>
-</div>
-
 </body>
 </html>
