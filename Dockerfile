@@ -1,5 +1,5 @@
 # Use OpenJDK as the base image
-FROM openjdk:17-jdk-slim as build
+FROM openjdk:23-jdk-slim as build
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY src ./src
 RUN ./gradlew build --no-daemon
 
 # Use a smaller OpenJDK image for runtime
-FROM openjdk:17-jdk-slim
+FROM openjdk:23-ea-1-jdk-slim
 
 # Set the working directory inside the container
 WORKDIR /app
