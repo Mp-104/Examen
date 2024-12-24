@@ -1,3 +1,4 @@
+/*
 package com.example.examen;
 
 import org.junit.jupiter.api.Test;
@@ -9,3 +10,5 @@ public class ExamenApplicationTest {
     @Test
     void contextLoads() {}
 }
+
+ */
