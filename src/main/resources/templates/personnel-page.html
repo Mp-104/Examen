@@ -147,6 +147,7 @@
 <!-- Main Content -->
 <div class="container">
     <h1>Lägg till Personal</h1>
+    <p th:if="${added}" th:text="${added}"></p>
     <form th:object="${personnel}" th:action="@{/personnel}" method="post" enctype="multipart/form-data">
         <label>Huvudbild:</label>
         <input type="file" name="imageFile" class="form-control">
@@ -179,6 +180,7 @@
 
         <button type="submit" class="btn btn-primary btn-block">Lägg till</button>
     </form>
+    <br/>
 
     <!-- Personnel List -->
     <ul class="list-group mb-4">

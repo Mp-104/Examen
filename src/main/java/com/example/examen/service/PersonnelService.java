@@ -124,6 +124,22 @@ public class PersonnelService implements IPersonnelService {
             customUser.getPersonnelList().remove(personnel);
             personnelRepository.deleteById(id);
 
+            // Ser till att uppdatera cache i samband med borttagning av en Personnel
+            Cache personnelByIdCache = cacheManager.getCache("personnel_by_id");
+            if (personnelByIdCache != null) {
+                personnelByIdCache.put(personnel.getId(), personnel);
+            }
+
+            Cache personnelAllCache = cacheManager.getCache("personnel_all1");
+            if (personnelAllCache != null) {
+                personnelAllCache.put("all", personnelRepository.findAll());
+            }
+
+            Cache personnelPageCache = cacheManager.getCache("personnel_all");
+            if (personnelPageCache != null) {
+                personnelPageCache.put("page_0_3_id:ASC", personnelRepository.findAll(PageRequest.of(0, 3, Sort.by("firstName").ascending())));
+            }
+
 
             return "Personnel med id: " + id + " borttagen";
         } else {
@@ -242,6 +258,7 @@ public class PersonnelService implements IPersonnelService {
 //        System.out.println("personnel.getImages(): what is saved: " + personnel.getImages());
         personnelRepository.save(personnel);
 
+        // Ser till att uppdatera cache i samband med tillägg av en Personnel
         Cache personnelByIdCache = cacheManager.getCache("personnel_by_id");
         if (personnelByIdCache != null) {
             personnelByIdCache.put(personnel.getId(), personnel);
