@@ -114,14 +114,18 @@
 
 <!-- Main Content -->
 <div class="container content">
-    <h1 class="text-center mb-4">Välkommen till Indexsidan</h1>
+    <h1 class="text-center mb-4">Välkommen</h1>
+
 
     <!-- Random Fact Section -->
+    <!--
     <div class="text-center mb-4">
         <a href="/random" class="btn btn-primary btn-custom">Se Random Fakt</a>
     </div>
+    -->
 
     <!-- Authentication Buttons -->
+    <!--
     <div class="section-heading">Autentisering</div>
     <div class="text-center mb-4">
         <a sec:authorize="isAnonymous()" href="/register" class="btn btn-outline-success btn-custom">Registrera</a>
@@ -130,15 +134,19 @@
             <button type="submit" class="btn btn-outline-danger btn-custom">Logga ut</button>
         </form>
     </div>
+    -->
 
     <!-- Personnel Section -->
+    <!--
     <div class="section-heading">Personal</div>
     <div class="text-center mb-4">
         <a href="/allpersonnel" class="btn btn-secondary btn-custom">Se Alla Personnel</a>
         <a href="/getPersonnel" class="btn btn-outline-secondary btn-custom">All Personnel</a>
     </div>
+    -->
 
     <!-- Additional Options -->
+    <!--
     <div sec:authorize="hasAuthority('POST')" class="text-center mb-2">
         <a href="/personnel" class="btn btn-outline-info btn-custom">Lägg till Uppgifter</a>
     </div>
@@ -148,12 +156,15 @@
     <div sec:authorize="hasRole('ADMIN')" class="text-center mb-4">
         <a href="/admin" class="btn btn-outline-danger btn-custom">Till Admin Sida</a>
     </div>
+    -->
 </div>
 
 <!-- Footer -->
+<!--
 <footer class="bg-white py-3 border-top">
     <p>&copy; 2024 Personnel System. Alla rättigheter förbehållna.</p>
 </footer>
+-->
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
