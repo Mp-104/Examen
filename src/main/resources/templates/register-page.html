@@ -129,6 +129,10 @@
 
 <div class="container">
   <h1>Registrera ny användare</h1>
+  <div class="status-message">
+    <span th:text="${status}"></span>
+  </div>
+  <br/>
   <form th:action="@{/register}" th:object="${newUser}" method="post">
     <div class="form-group">
       <label>Förnamn:</label>
@@ -177,9 +181,6 @@
 
   <a href="/" class="back-link">Tillbaka till huvud/loginsida</a>
 
-  <div class="status-message">
-    <span th:text="${status}"></span>
-  </div>
 </div>
 </body>
 </html>
