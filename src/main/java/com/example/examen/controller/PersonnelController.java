@@ -173,7 +173,7 @@ public class PersonnelController {
 
         Personnel personnelToEdit = personnelService.findPersonnelById(personnel.getId()).get();
 
-        if (files != null && multipartFile !=null) {
+        if ((files != null && multipartFile !=null) && multipartFile != null) {
 
             if(multipartFile.getSize() > 1500000 || files.stream().anyMatch(file -> file.getSize() > 1500000)) {
 
