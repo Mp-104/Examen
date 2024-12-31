@@ -165,6 +165,29 @@ public class PersonnelController {
 
     }
 
+    @PostMapping("/personnel-info")
+    //@Transactional
+    public String personnelInfoPage2 (@ModelAttribute("personnel") Personnel personnel, Model model) {
+
+        Personnel foundPersonnel = personnelService.findPersonnelById(personnel.getId()).get();
+        System.out.println("POST----- PersonnelController -- personnelInfoPage ----POST ");
+//        System.out.println("personnel.getFirstName: " + personnel.getFirstName());
+//        System.out.println("getImages.size: " + personnel.getImages().size());
+//        System.out.println("getImages.get0: " + personnel.getImages().get(0));
+//        System.out.println("getImages.get1: " + personnel.getImages().get(1));
+        System.out.println("/POST----- PersonnelController -- personnelInfoPage ---- ");
+
+        foundPersonnel.getCustomUser().getUsername();
+        //String image = personnel.getImages().get(0);
+
+
+        //model.addAttribute("personnel", personnel);
+        model.addAttribute("personnel", foundPersonnel);
+        model.addAttribute("countries", getAllNatoCountries());
+        return "personnel-info-page2";
+
+    }
+
     @PostMapping("/edit")
     public String editPersonnel (@ModelAttribute Personnel personnel, Model model,
                                  @RequestParam("imageFiles") List<MultipartFile> files,
@@ -190,15 +213,18 @@ public class PersonnelController {
         List<String> images = personnelToEdit.getImages();
 
         // to prevent duplicates
-        Set<String> uniqueImages = new HashSet<>(images);
+        if (images != null) {
+            Set<String> uniqueImages = new HashSet<>(images);
 
-        for (MultipartFile file : files) {
+            for (MultipartFile file : files) {
 
-            uniqueImages.add(Base64.getEncoder().encodeToString(file.getBytes()));
+                uniqueImages.add(Base64.getEncoder().encodeToString(file.getBytes()));
 
+            }
+
+            images = new ArrayList<>(uniqueImages);
         }
 
-        images = new ArrayList<>(uniqueImages);
 
 
         personnelToEdit.setFirstName(personnel.getFirstName());
@@ -234,6 +260,81 @@ public class PersonnelController {
 
     }
 
+    @PostMapping("/edit2")
+    public String editPersonnel2 (@ModelAttribute Personnel personnel, Model model,
+                                 @RequestParam("imageFiles") List<MultipartFile> files,
+                                 @RequestParam(value = "imageFile", required = false) MultipartFile multipartFile) throws IOException {
+
+
+        Personnel personnelToEdit = personnelService.findPersonnelById(personnel.getId()).get();
+
+        if ((files != null && multipartFile !=null) && multipartFile != null) {
+
+            if(multipartFile.getSize() > 1500000 || files.stream().anyMatch(file -> file.getSize() > 1500000)) {
+
+                model.addAttribute("error", "fil för stor, får inte vara större än 1,5 MB");
+                model.addAttribute("personnel", personnelToEdit);
+                model.addAttribute("countries", getAllNatoCountries());
+                return "personnel-info-page2";
+            }
+        }
+
+
+
+        //System.out.println("PersonnelController, editPersonnel: multipartFile.getSize(): " + multipartFile.getSize() + " bytes");
+        List<String> images = personnelToEdit.getImages();
+
+        // to prevent duplicates
+        if (images != null) {
+
+            Set<String> uniqueImages = new HashSet<>(images);
+
+            for (MultipartFile file : files) {
+
+                uniqueImages.add(Base64.getEncoder().encodeToString(file.getBytes()));
+
+            }
+
+            images = new ArrayList<>(uniqueImages);
+        }
+
+
+
+
+
+        personnelToEdit.setFirstName(personnel.getFirstName());
+        personnelToEdit.setLastName(personnel.getLastName());
+        personnelToEdit.setBranch(personnel.getBranch());
+        personnelToEdit.setCountryAllegiance(personnel.getCountryAllegiance());
+        personnelToEdit.setRank(personnel.getRank());
+        personnelToEdit.setHomeAddress(personnel.getHomeAddress());
+        personnelToEdit.setDescription(personnel.getDescription());
+
+        if (multipartFile == null) {
+
+            personnelToEdit.setPicture(null);
+
+        } else {
+
+            personnelToEdit.setPicture(multipartFile.getBytes());
+
+        }
+
+        //System.out.println("file1.getBytes(): " + Arrays.toString(file1.getBytes()));
+        //personnel1.setPicture(file1.getBytes());
+
+
+        personnelToEdit.setImages(images);
+
+        personnelService.savePersonnel(personnelToEdit);
+
+        model.addAttribute("personnel", personnelToEdit);
+        model.addAttribute("countries", getAllNatoCountries());
+
+        return "personnel-info-page2";
+
+    }
+
 
 
 //    @ExceptionHandler(MaxUploadSizeExceededException.class)
@@ -243,3 +344,13 @@ public class PersonnelController {
 //    }
 
 }
+
+
+
+//    @ExceptionHandler(MaxUploadSizeExceededException.class)
+//    public String handleFileSizeException (MaxUploadSizeExceededException exception, Model model) {
+//        model.addAttribute("error", "fil för stor");
+//        return "personnel-info-page";
+//    }
+
+
