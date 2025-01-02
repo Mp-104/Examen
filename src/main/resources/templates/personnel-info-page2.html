@@ -212,8 +212,8 @@
     <h2 th:if="${personnel.description != null and personnel.description.trim() != ''}" class="section-heading">Beskrivning</h2>
     <p th:text="${personnel.description}"></p>
 
-    <h2 sec:authorize="hasRole('USER')" class="section-heading">Redigera Information</h2>
-    <form sec:authorize="hasRole('USER')" th:action="@{/edit2}" th:object="${personnel}" method="post" enctype="multipart/form-data">
+    <h2 sec:authorize="hasAuthority('PUT')" class="section-heading">Redigera Information</h2>
+    <form sec:authorize="hasAuthority('PUT')" th:action="@{/edit2}" th:object="${personnel}" method="post" enctype="multipart/form-data">
         <input type="hidden" th:field="*{id}">
 
 
