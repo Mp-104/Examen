@@ -121,6 +121,8 @@ public class PersonnelController {
 
         usersPersonnelList = userService.findUserByUsername(getLoggedInUser()).get().getPersonnelList();
 
+        //personnelService.findAll();
+
         model.addAttribute("added", "Tillagt: " + personnel.getFirstName());
         model.addAttribute("personnel", new Personnel());
         model.addAttribute("personnelList", usersPersonnelList);
@@ -262,7 +264,7 @@ public class PersonnelController {
 
     @PostMapping("/edit2")
     public String editPersonnel2 (@ModelAttribute Personnel personnel, Model model,
-                                 @RequestParam("imageFiles") List<MultipartFile> files,
+                                 @RequestParam(value = "imageFiles", required = false) List<MultipartFile> files,
                                  @RequestParam(value = "imageFile", required = false) MultipartFile multipartFile) throws IOException {
 
 

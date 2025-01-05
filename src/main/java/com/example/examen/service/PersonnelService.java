@@ -237,6 +237,11 @@ public class PersonnelService implements IPersonnelService {
 
 
         //Todo - see if this can be made more efficient
+
+        System.out.println("-----------Debugging images in savePersonnel--------------");
+        System.out.println("getImages(): " + personnel.getImages());
+        System.out.println("-----------Debugging images in savePersonnel--------------");
+        // To ensure no broken images make into when editing a personnel
         if (personnel.getImages() != null) {
 
 
@@ -249,9 +254,10 @@ public class PersonnelService implements IPersonnelService {
 
                     personnel.setImages(personnel.getImages());
 
-                } else {
-                    personnel.setImages(null);
                 }
+                //else {
+                //    personnel.setImages(null);
+               // }
 
             }
 
