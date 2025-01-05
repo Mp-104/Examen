@@ -148,12 +148,14 @@ public class PersonnelService implements IPersonnelService {
         }
     }
 
+    /*
     @Override
     //@CachePut(cacheNames = "personnelCache2", key = "'personnel_' + #personnel.id")
     //@CacheEvict(cacheNames = {"personnelCache", "personnelCache2"}, allEntries = true)
     //@CachePut(cacheNames = {"personnel_by_id"}, key = "#personnel.id")
     //@CachePut(cacheNames = {"personnel_all"}, key = "'all'")
     //@CachePut(cacheNames = {"personnel_all"}, key = "'page_0_10_id:ASC'")
+    @Transactional
     public void savePersonnel(Personnel personnel) {
 
         List<String> imageList = new ArrayList<>();
@@ -283,4 +285,87 @@ public class PersonnelService implements IPersonnelService {
             personnelPageCache.put("page_0_3_id:ASC", personnelRepository.findAll(PageRequest.of(0, 3, Sort.by("firstName").ascending())));
         }
     }
+
+     */
+
+    @Override
+    @Transactional
+    public void savePersonnel(Personnel personnel) {
+        List<String> imageList = processImages(personnel);
+
+        if (imageList.size() > 0) {
+            personnel.setImages(imageList);
+        }
+
+        handleMainImage(personnel);
+
+        if (personnel.getCustomUser() == null) {
+            CustomUser loggedInUser = userService.findUserByUsername(getLoggedInUser()).orElseThrow(() -> new RuntimeException("User not found"));
+            personnel.setCustomUser(loggedInUser);
+        }
+
+        cleanImages(personnel);
+
+        // Save the personnel entity
+        personnelRepository.save(personnel);
+
+        // Cache operations
+        updateCache(personnel);
+    }
+
+    private List<String> processImages(Personnel personnel) {
+        List<String> imageList = new ArrayList<>();
+        if (personnel.getPictures() != null) {
+            for (byte[] picture : personnel.getPictures()) {
+                String base64 = Base64.getEncoder().encodeToString(picture);
+                imageList.add(base64);
+            }
+        }
+        return imageList;
+    }
+
+    private void handleMainImage(Personnel personnel) {
+        if (personnel.getImage() == null) {
+            if (Arrays.toString(personnel.getPicture()).equals("[]")) {
+                personnel.setImage(placeholderImage());
+            } else {
+                if (personnel.getPicture() !=null) {
+                    String base64 = Base64.getEncoder().encodeToString(personnel.getPicture());
+                    personnel.setImage(base64);
+                }
+
+            }
+        } else if (Objects.equals(personnel.getImage(), placeholderImage()) && personnel.getPicture() != null) {
+            String base64 = Base64.getEncoder().encodeToString(personnel.getPicture());
+            personnel.setImage(base64);
+        }
+    }
+
+    private void cleanImages(Personnel personnel) {
+        if (personnel.getImages() != null && (personnel.getImages().isEmpty() || personnel.getImages().get(0).isBlank())) {
+            personnel.getImages().removeIf(String::isBlank);
+            if (personnel.getImages().isEmpty()) {
+                personnel.setImages(null);
+            }
+        }
+    }
+
+    private void updateCache(Personnel personnel) {
+        Cache personnelByIdCache = cacheManager.getCache("personnel_by_id");
+        if (personnelByIdCache != null) {
+            personnelByIdCache.put(personnel.getId(), personnel);
+        }
+
+        Cache personnelAllCache = cacheManager.getCache("personnel_all1");
+        if (personnelAllCache != null) {
+            personnelAllCache.put("all", personnelRepository.findAll());
+        }
+
+        Cache personnelPageCache = cacheManager.getCache("personnel_all");
+        if (personnelPageCache != null) {
+            personnelPageCache.put("page_0_3_id:ASC", personnelRepository.findAll(PageRequest.of(0, 3, Sort.by("firstName").ascending())));
+        }
+    }
+
+
 }

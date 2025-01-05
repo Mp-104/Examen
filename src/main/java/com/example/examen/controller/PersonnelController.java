@@ -121,7 +121,14 @@ public class PersonnelController {
 
         usersPersonnelList = userService.findUserByUsername(getLoggedInUser()).get().getPersonnelList();
 
-        //personnelService.findAll();
+        List<Personnel> allPersonnel = personnelService.findAll();
+        List<Personnel> usersPersonnelList2 = new ArrayList<>();
+
+        for (Personnel personnel1 : allPersonnel) {
+            if (Objects.equals(personnel1.getCustomUser().toString(), getLoggedInUser())) {
+                usersPersonnelList2.add(personnel1);
+            }
+        }
 
         model.addAttribute("added", "Tillagt: " + personnel.getFirstName());
         model.addAttribute("personnel", new Personnel());
@@ -129,8 +136,8 @@ public class PersonnelController {
 
         model.addAttribute("countries", getAllNatoCountries());
 
-        //return "redirect:/personnel";
-        return "personnel-page";
+        return "redirect:/personnel";
+        //return "personnel-page";
 
     }
 
@@ -267,6 +274,11 @@ public class PersonnelController {
                                  @RequestParam(value = "imageFiles", required = false) List<MultipartFile> files,
                                  @RequestParam(value = "imageFile", required = false) MultipartFile multipartFile) throws IOException {
 
+        System.out.println("----------Debugging images in edit2 personnelcontroller----------");
+        System.out.println("files: " + files);
+        System.out.println("files.size(): " + files.size());
+        System.out.println("----------Debugging images in edit2 personnelcontroller----------");
+
 
         Personnel personnelToEdit = personnelService.findPersonnelById(personnel.getId()).get();
 
@@ -284,7 +296,17 @@ public class PersonnelController {
 
 
         //System.out.println("PersonnelController, editPersonnel: multipartFile.getSize(): " + multipartFile.getSize() + " bytes");
-        List<String> images = personnelToEdit.getImages();
+        List<String> images = new ArrayList<>();
+
+        if (personnelToEdit.getImages() != null) {
+            images = personnelToEdit.getImages();
+        }
+
+        if (files != null) {
+            for (MultipartFile file : files) {
+                images.add(Base64.getEncoder().encodeToString(file.getBytes()));
+            }
+        }
 
         // to prevent duplicates
         if (images != null) {
@@ -325,6 +347,9 @@ public class PersonnelController {
         //System.out.println("file1.getBytes(): " + Arrays.toString(file1.getBytes()));
         //personnel1.setPicture(file1.getBytes());
 
+        System.out.println("----------Debugging images in edit2 personnelcontroller----------");
+        System.out.println("images: " + images);
+        System.out.println("----------Debugging images in edit2 personnelcontroller----------");
 
         personnelToEdit.setImages(images);
 
