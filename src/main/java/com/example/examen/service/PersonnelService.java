@@ -203,9 +203,12 @@ public class PersonnelService implements IPersonnelService {
 
             } else {
 
-                String base64 = Base64.getEncoder().encodeToString(personnel.getPicture());
+                if (personnel.getPicture() != null) {
+                    String base64 = Base64.getEncoder().encodeToString(personnel.getPicture());
 
-                personnel.setImage(base64);
+                    personnel.setImage(base64);
+                }
+
             }
 
         } else if (Objects.equals(personnel.getImage(), placeholderImage())
